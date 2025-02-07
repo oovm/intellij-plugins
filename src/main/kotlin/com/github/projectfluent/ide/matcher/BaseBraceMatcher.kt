@@ -29,7 +29,9 @@ class BaseBraceMatcher : PairedBraceMatcher {
         private val InsertPairBraceBefore = TokenSet.orSet(
             FluentParserDefinition.commentTokens,
             TokenSet.create(
-                TokenType.WHITE_SPACE,
+                FluentTypes.LINE_END,
+                FluentTypes.INLINE_BLANK,
+                FluentTypes.INDENT,
                 FluentTypes.COMMA,
 //                AwslTypes.PARENTHESIS_R,
 //                AwslTypes.BRACKET_R,

@@ -9,7 +9,7 @@ class FluentAttributeReference(element: PsiElement) : PsiReferenceBase<PsiElemen
         val attributeName = element.text
         val messageReference = element.parent.parent // MESSAGE_REFERENCE
         val messageIdNode = messageReference.node.findChildByType(FluentTypes.MESSAGE_ID)
-        val messageId = messageIdNode?.psi as? PsiElement
+        val messageId = messageIdNode?.psi
         val symbolNode = messageIdNode?.findChildByType(FluentTypes.SYMBOL)
         val messageName = symbolNode?.psi?.text
         
@@ -28,7 +28,7 @@ class FluentAttributeReference(element: PsiElement) : PsiReferenceBase<PsiElemen
                     val msgIdNode = element.node.findChildByType(FluentTypes.MESSAGE_ID)
                     if (msgIdNode != null) {
                         val msgSymbolNode = msgIdNode.findChildByType(FluentTypes.SYMBOL)
-                        val msgSymbol = msgSymbolNode?.psi as? PsiElement
+                        val msgSymbol = msgSymbolNode?.psi
                         if (msgSymbol != null && msgSymbol.text == messageName) {
                             // 查找该消息的属性
                             val attributes = element.getChildrenOfType(FluentTypes.ATTRIBUTE)
@@ -36,7 +36,7 @@ class FluentAttributeReference(element: PsiElement) : PsiReferenceBase<PsiElemen
                                 val attrIdNode = attribute.node.findChildByType(FluentTypes.ATTRIBUTE_ID)
                                 if (attrIdNode != null) {
                                     val attrSymbolNode = attrIdNode.findChildByType(FluentTypes.SYMBOL)
-                                    val attrSymbol = attrSymbolNode?.psi as? PsiElement
+                                    val attrSymbol = attrSymbolNode?.psi
                                     if (attrSymbol != null && attrSymbol.text == attributeName) {
                                         result = attrSymbol
                                         return
@@ -74,7 +74,7 @@ class FluentAttributeReference(element: PsiElement) : PsiReferenceBase<PsiElemen
                     val msgIdNode = element.node.findChildByType(FluentTypes.MESSAGE_ID)
                     if (msgIdNode != null) {
                         val msgSymbolNode = msgIdNode.findChildByType(FluentTypes.SYMBOL)
-                        val msgSymbol = msgSymbolNode?.psi as? PsiElement
+                        val msgSymbol = msgSymbolNode?.psi
                         if (msgSymbol != null && msgSymbol.text == messageName) {
                             // 收集该消息的所有属性
                             val attributes = element.getChildrenOfType(FluentTypes.ATTRIBUTE)
@@ -82,7 +82,7 @@ class FluentAttributeReference(element: PsiElement) : PsiReferenceBase<PsiElemen
                                 val attrIdNode = attribute.node.findChildByType(FluentTypes.ATTRIBUTE_ID)
                                 if (attrIdNode != null) {
                                     val attrSymbolNode = attrIdNode.findChildByType(FluentTypes.SYMBOL)
-                                    val attrSymbol = attrSymbolNode?.psi as? PsiElement
+                                    val attrSymbol = attrSymbolNode?.psi
                                     if (attrSymbol != null) {
                                         variants.add(attrSymbol)
                                     }

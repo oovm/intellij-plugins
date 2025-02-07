@@ -27,7 +27,7 @@ object FluentParserDefinition : ParserDefinition {
         FluentTypes.STRING_CHAR,
         FluentTypes.STRING_ESCAPE
     )
-    override fun getWhitespaceTokens(): TokenSet = TokenSet.create(TokenType.WHITE_SPACE)
+    override fun getWhitespaceTokens(): TokenSet = TokenSet.EMPTY
     override fun createElement(node: ASTNode): PsiElement = FluentFactory.createElement(node)
     override fun createFile(viewProvider: FileViewProvider): PsiFile = FluentFileNode(viewProvider)
     override fun spaceExistenceTypeBetweenTokens(left: ASTNode, right: ASTNode): SpaceRequirements {

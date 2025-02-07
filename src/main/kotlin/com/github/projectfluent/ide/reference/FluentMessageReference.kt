@@ -19,7 +19,7 @@ class FluentMessageReference(element: PsiElement) : PsiReferenceBase<PsiElement>
                     val messageIdNode = element.node.findChildByType(FluentTypes.MESSAGE_ID)
                     if (messageIdNode != null) {
                         val symbolNode = messageIdNode.findChildByType(FluentTypes.SYMBOL)
-                        val symbol = symbolNode?.psi as? PsiElement
+                        val symbol = symbolNode?.psi
                         if (symbol != null && symbol.text == messageName) {
                             result = symbol
                             return
@@ -46,7 +46,7 @@ class FluentMessageReference(element: PsiElement) : PsiReferenceBase<PsiElement>
                     val messageIdNode = element.node.findChildByType(FluentTypes.MESSAGE_ID)
                     if (messageIdNode != null) {
                         val symbolNode = messageIdNode.findChildByType(FluentTypes.SYMBOL)
-                        val symbol = symbolNode?.psi as? PsiElement
+                        val symbol = symbolNode?.psi
                         if (symbol != null) {
                             variants.add(symbol)
                         }

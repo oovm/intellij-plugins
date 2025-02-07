@@ -5,552 +5,182 @@ import com.intellij.lang.LightPsiParser
 import com.intellij.lang.PsiBuilder
 import com.intellij.lang.PsiParser
 import com.intellij.psi.tree.IElementType
-import com.intellij.psi.TokenType
 
 class FluentParser : PsiParser, LightPsiParser {
     override fun parse(root: IElementType, builder: PsiBuilder): ASTNode {
-        val rootMarker = builder.mark()
-        
-        while (!builder.eof()) {
-            when (builder.tokenType) {
-                TokenType.WHITE_SPACE -> {
-                    val whitespaceMarker = builder.mark()
-                    builder.advanceLexer()
-                    whitespaceMarker.done(TokenType.WHITE_SPACE)
-                }
-                FluentTypes.COMMENT_LINE -> {
-                    val commentMarker = builder.mark()
-                    builder.advanceLexer()
-                    commentMarker.done(FluentTypes.COMMENT_LINE)
-                }
-                FluentTypes.HYPHEN -> {
-                    // Check if this is a term (starts with - followed by symbol and =)
-                    var lookAheadOffset = 1
-                    // Skip whitespace and comments when looking ahead
-                    while (builder.lookAhead(lookAheadOffset) == TokenType.WHITE_SPACE || builder.lookAhead(lookAheadOffset) == FluentTypes.COMMENT_LINE) {
-                        lookAheadOffset++
-                    }
-                    
-                    if (builder.lookAhead(lookAheadOffset) == FluentTypes.SYMBOL) {
-                        // Skip whitespace and comments between symbol and EQ
-                        var eqOffset = lookAheadOffset + 1
-                        while (builder.lookAhead(eqOffset) == TokenType.WHITE_SPACE || builder.lookAhead(eqOffset) == FluentTypes.COMMENT_LINE) {
-                            eqOffset++
-                        }
-                        
-                        if (builder.lookAhead(eqOffset) == FluentTypes.EQ) {
-                            parseTerm(builder)
-                        } else {
-                            val hyphenMarker = builder.mark()
-                            builder.advanceLexer()
-                            hyphenMarker.done(FluentTypes.INLINE_TEXT)
-                        }
-                    } else {
-                        val hyphenMarker = builder.mark()
-                        builder.advanceLexer()
-                        hyphenMarker.done(FluentTypes.INLINE_TEXT)
-                    }
-                }
-                FluentTypes.SYMBOL -> {
-                    // Skip whitespace and comments between symbol and EQ
-                    var lookAheadOffset = 1
-                    while (builder.lookAhead(lookAheadOffset) == TokenType.WHITE_SPACE || builder.lookAhead(lookAheadOffset) == FluentTypes.COMMENT_LINE) {
-                        lookAheadOffset++
-                    }
-                    
-                    if (builder.lookAhead(lookAheadOffset) == FluentTypes.EQ) {
-                        parseMessage(builder)
-                    } else {
-                        val symbolMarker = builder.mark()
-                        builder.advanceLexer()
-                        symbolMarker.done(FluentTypes.INLINE_TEXT)
-                    }
-                }
-                else -> {
-                    builder.advanceLexer()
-                }
-            }
-        }
-        
-        rootMarker.done(root)
+        parseRoot(builder, root)
         return builder.treeBuilt
     }
 
     override fun parseLight(root: IElementType?, builder: PsiBuilder?) {
         if (root != null && builder != null) {
-            val rootMarker = builder.mark()
-            
-            while (!builder.eof()) {
-                when (builder.tokenType) {
-                    TokenType.WHITE_SPACE -> {
-                        val whitespaceMarker = builder.mark()
-                        builder.advanceLexer()
-                        whitespaceMarker.done(TokenType.WHITE_SPACE)
-                    }
-                    FluentTypes.COMMENT_LINE -> {
-                        val commentMarker = builder.mark()
-                        builder.advanceLexer()
-                        commentMarker.done(FluentTypes.COMMENT_LINE)
-                    }
-                    FluentTypes.HYPHEN -> {
-                    // Check if this is a term (starts with - followed by symbol and =)
-                    var lookAheadOffset = 1
-                    // Skip whitespace and comments when looking ahead
-                    while (builder.lookAhead(lookAheadOffset) == TokenType.WHITE_SPACE || builder.lookAhead(lookAheadOffset) == FluentTypes.COMMENT_LINE) {
-                        lookAheadOffset++
-                    }
-                    
-                    if (builder.lookAhead(lookAheadOffset) == FluentTypes.SYMBOL) {
-                        // Skip whitespace and comments between symbol and EQ
-                        var eqOffset = lookAheadOffset + 1
-                        while (builder.lookAhead(eqOffset) == TokenType.WHITE_SPACE || builder.lookAhead(eqOffset) == FluentTypes.COMMENT_LINE) {
-                            eqOffset++
-                        }
-                        
-                        if (builder.lookAhead(eqOffset) == FluentTypes.EQ) {
-                            parseTerm(builder)
-                        } else {
-                            val hyphenMarker = builder.mark()
-                            builder.advanceLexer()
-                            hyphenMarker.done(FluentTypes.INLINE_TEXT)
-                        }
-                    } else {
-                        val hyphenMarker = builder.mark()
-                        builder.advanceLexer()
-                        hyphenMarker.done(FluentTypes.INLINE_TEXT)
-                    }
-                }
-                    FluentTypes.SYMBOL -> {
-                        // Skip whitespace and comments between symbol and EQ
-                        var lookAheadOffset = 1
-                        while (builder.lookAhead(lookAheadOffset) == TokenType.WHITE_SPACE || builder.lookAhead(lookAheadOffset) == FluentTypes.COMMENT_LINE) {
-                            lookAheadOffset++
-                        }
-                        
-                        if (builder.lookAhead(lookAheadOffset) == FluentTypes.EQ) {
-                            parseMessage(builder)
-                        } else {
-                            val symbolMarker = builder.mark()
-                            builder.advanceLexer()
-                            symbolMarker.done(FluentTypes.INLINE_TEXT)
-                        }
-                    }
-                    else -> {
-                        builder.advanceLexer()
-                    }
-                }
-            }
-            
-            rootMarker.done(root)
+            parseRoot(builder, root)
         }
     }
 
-    private fun parseFluent(builder: PsiBuilder) {
-        // This method is no longer used since we moved the parsing logic to parse() and parseLight()
+    private fun parseRoot(builder: PsiBuilder, root: IElementType) {
+        val rootMarker = builder.mark()
+        while (!builder.eof()) {
+            when (builder.tokenType) {
+                FluentTypes.LINE_END,
+                FluentTypes.INLINE_BLANK,
+                FluentTypes.INDENT,
+                FluentTypes.COMMENT_LINE -> consumeLeaf(builder)
+                FluentTypes.SYMBOL -> if (isMessageStart(builder)) parseMessage(builder) else consumeTopLevelJunkLine(builder)
+                FluentTypes.HYPHEN -> if (isTermStart(builder)) parseTerm(builder) else consumeTopLevelJunkLine(builder)
+                else -> consumeTopLevelJunkLine(builder)
+            }
+        }
+        rootMarker.done(root)
+    }
+
+    private fun consumeTopLevelJunkLine(builder: PsiBuilder) {
+        while (!builder.eof() && builder.tokenType != FluentTypes.LINE_END) {
+            builder.advanceLexer()
+        }
+        if (builder.tokenType == FluentTypes.LINE_END) {
+            consumeLeaf(builder)
+        }
+    }
+
+    private fun consumeLeaf(builder: PsiBuilder) {
+        val tokenType = builder.tokenType ?: return
+        val marker = builder.mark()
+        builder.advanceLexer()
+        marker.done(tokenType)
     }
 
     private fun parseMessage(builder: PsiBuilder) {
         val messageMarker = builder.mark()
-        
-        // Parse message ID
+
         val idMarker = builder.mark()
-        builder.advanceLexer() // Consume symbol
+        builder.advanceLexer()
         idMarker.done(FluentTypes.MESSAGE_ID)
-        
-        // Skip whitespace between symbol and EQ
-        while (builder.tokenType == TokenType.WHITE_SPACE) {
-            val whitespaceMarker = builder.mark()
-            builder.advanceLexer()
-            whitespaceMarker.done(TokenType.WHITE_SPACE)
-        }
-        
-        // Parse EQ - wrap it in a FluentElement that contains the EQ token
-        if (builder.tokenType == FluentTypes.EQ) {
-            val eqElementMarker = builder.mark()
-            builder.advanceLexer() // Consume EQ token - it will be added as a child of eqElementMarker as a token
-            eqElementMarker.done(FluentTypes.EQ)
-        }
-        
-        // Skip whitespace after EQ
-        while (builder.tokenType == TokenType.WHITE_SPACE) {
-            val whitespaceMarker = builder.mark()
-            builder.advanceLexer()
-            whitespaceMarker.done(TokenType.WHITE_SPACE)
-        }
-        
-        // Parse pattern
+
+        consumeInlineBlanks(builder)
+        parseEq(builder)
+        consumeInlineBlanks(builder)
         parsePattern(builder)
-        
-        // Parse attributes
-        while (!builder.eof()) {
-            // Skip whitespace first
-            while (builder.tokenType == TokenType.WHITE_SPACE) {
-                builder.advanceLexer()
+
+        while (startsAttributeAfterLineEnd(builder)) {
+            consumeLeaf(builder)
+            if (builder.tokenType == FluentTypes.INDENT) {
+                consumeLeaf(builder)
             }
-            
-            // Check if this is a message boundary
-            if (isMessageBoundary(builder)) {
-                break
-            }
-            
-            // If the next token is a dot, try to parse an attribute
-            if (builder.tokenType == FluentTypes.DOT) {
-                if (!parseAttribute(builder)) {
-                    // This is not an attribute, break
-                    break
-                }
-            } else {
-                // This is not an attribute or new message, break
-                break
-            }
+            parseAttribute(builder)
         }
-        
+
         messageMarker.done(FluentTypes.MESSAGE)
     }
 
     private fun parseTerm(builder: PsiBuilder) {
         val termMarker = builder.mark()
-        
-        // Parse term ID (HYPHEN + SYMBOL together as TERM_ID)
-        // No whitespace between HYPHEN and SYMBOL in valid Fluent syntax
+
         val idMarker = builder.mark()
         if (builder.tokenType == FluentTypes.HYPHEN) {
-            builder.advanceLexer() // Consume hyphen as part of TERM_ID
+            builder.advanceLexer()
         }
         if (builder.tokenType == FluentTypes.SYMBOL) {
-            builder.advanceLexer() // Consume symbol as part of TERM_ID
+            builder.advanceLexer()
         }
         idMarker.done(FluentTypes.TERM_ID)
-        
-        // Skip whitespace between term ID and EQ
-        while (builder.tokenType == TokenType.WHITE_SPACE) {
-            val whitespaceMarker = builder.mark()
-            builder.advanceLexer()
-            whitespaceMarker.done(TokenType.WHITE_SPACE)
+
+        consumeInlineBlanks(builder)
+        parseEq(builder)
+        consumeInlineBlanks(builder)
+        parsePattern(builder)
+
+        while (startsAttributeAfterLineEnd(builder)) {
+            consumeLeaf(builder)
+            if (builder.tokenType == FluentTypes.INDENT) {
+                consumeLeaf(builder)
+            }
+            parseAttribute(builder)
         }
-        
-        // Consume EQ
+
+        termMarker.done(FluentTypes.TERM)
+    }
+
+    private fun parseAttribute(builder: PsiBuilder): Boolean {
+        if (!isAttributeStart(builder)) {
+            return false
+        }
+
+        val attributeMarker = builder.mark()
+        val idMarker = builder.mark()
+        builder.advanceLexer()
+        builder.advanceLexer()
+        idMarker.done(FluentTypes.ATTRIBUTE_ID)
+
+        consumeInlineBlanks(builder)
+        parseEq(builder)
+        consumeInlineBlanks(builder)
+        parsePattern(builder)
+
+        attributeMarker.done(FluentTypes.ATTRIBUTE)
+        return true
+    }
+
+    private fun parseEq(builder: PsiBuilder) {
         if (builder.tokenType == FluentTypes.EQ) {
             val eqMarker = builder.mark()
             builder.advanceLexer()
             eqMarker.done(FluentTypes.EQ)
         }
-        
-        // Skip whitespace and comments after EQ
-        while (builder.tokenType == TokenType.WHITE_SPACE || builder.tokenType == FluentTypes.COMMENT_LINE) {
-            val marker = builder.mark()
-            val tokenType = builder.tokenType
-            builder.advanceLexer()
-            marker.done(if (tokenType == TokenType.WHITE_SPACE) TokenType.WHITE_SPACE else FluentTypes.COMMENT_LINE)
-        }
-        
-        // Parse pattern
-        parsePattern(builder)
-        
-        // Parse attributes - same approach as in parseMessage
-        while (!builder.eof()) {
-            // Skip whitespace first
-            while (builder.tokenType == TokenType.WHITE_SPACE) {
-                builder.advanceLexer()
-            }
-
-            // Check if this is a message boundary
-            if (isMessageBoundary(builder)) {
-                break
-            }
-
-            // If the next token is a dot, try to parse an attribute
-            if (builder.tokenType == FluentTypes.DOT) {
-                if (!parseAttribute(builder)) {
-                    // This is not an attribute, break
-                    break
-                }
-            } else {
-                // This is not an attribute or new message, break
-                break
-            }
-        }
-        
-        termMarker.done(FluentTypes.TERM)
-    }
-
-    private fun parseAttribute(builder: PsiBuilder): Boolean {
-        // Check if this is actually an attribute
-        // Check if there's a comment after the dot without consuming the dot
-        var lookAheadOffset = 1
-        while (builder.lookAhead(lookAheadOffset) == TokenType.WHITE_SPACE) {
-            lookAheadOffset++
-        }
-        
-        // If there's a comment after the dot, it's not an attribute
-        if (builder.lookAhead(lookAheadOffset) == FluentTypes.COMMENT_LINE) {
-            return false
-        }
-        
-        // Check if this is an attribute start
-        var symbolOffset = lookAheadOffset
-        if (builder.lookAhead(symbolOffset) != FluentTypes.SYMBOL) {
-            return false
-        }
-        
-        var eqOffset = symbolOffset + 1
-        while (builder.lookAhead(eqOffset) == TokenType.WHITE_SPACE || builder.lookAhead(eqOffset) == FluentTypes.COMMENT_LINE) {
-            eqOffset++
-        }
-        
-        if (builder.lookAhead(eqOffset) != FluentTypes.EQ) {
-            return false
-        }
-        
-        // Now parse the attribute
-        val attributeMarker = builder.mark()
-        
-        // Parse attribute ID (DOT + SYMBOL together as ATTRIBUTE_ID)
-        val idMarker = builder.mark()
-        if (builder.tokenType == FluentTypes.DOT) {
-            builder.advanceLexer() // Consume DOT token
-        }
-        
-        // Skip only whitespace between DOT and SYMBOL
-        while (builder.tokenType == TokenType.WHITE_SPACE) {
-            val marker = builder.mark()
-            builder.advanceLexer()
-            marker.done(TokenType.WHITE_SPACE)
-        }
-        
-        if (builder.tokenType == FluentTypes.SYMBOL) {
-            builder.advanceLexer() // Consume symbol
-        } else {
-            // This is not an attribute, drop the markers and return
-            idMarker.drop()
-            attributeMarker.drop()
-            return false
-        }
-        idMarker.done(FluentTypes.ATTRIBUTE_ID)
-        
-        // Skip whitespace and comments between attribute ID and EQ
-        while (builder.tokenType == TokenType.WHITE_SPACE || builder.tokenType == FluentTypes.COMMENT_LINE) {
-            val marker = builder.mark()
-            val tokenType = builder.tokenType
-            builder.advanceLexer()
-            marker.done(if (tokenType == TokenType.WHITE_SPACE) TokenType.WHITE_SPACE else FluentTypes.COMMENT_LINE)
-        }
-        
-        // Parse EQ - wrap it in a FluentElement that contains the EQ token
-        if (builder.tokenType == FluentTypes.EQ) {
-            val eqElementMarker = builder.mark()
-            builder.advanceLexer() // Consume EQ token - it will be added as a child of eqElementMarker as a token
-            eqElementMarker.done(FluentTypes.EQ)
-        }
-        
-        // Skip whitespace and comments after EQ
-        while (builder.tokenType == TokenType.WHITE_SPACE || builder.tokenType == FluentTypes.COMMENT_LINE) {
-            val marker = builder.mark()
-            val tokenType = builder.tokenType
-            builder.advanceLexer()
-            marker.done(if (tokenType == TokenType.WHITE_SPACE) TokenType.WHITE_SPACE else FluentTypes.COMMENT_LINE)
-        }
-        
-        // Parse pattern
-        parsePattern(builder)
-        
-        attributeMarker.done(FluentTypes.ATTRIBUTE)
-        return true
     }
 
     private fun parsePattern(builder: PsiBuilder) {
         val patternMarker = builder.mark()
-        
-        while (!builder.eof()) {
-            // Skip whitespace first
-            while (!builder.eof() && builder.tokenType == TokenType.WHITE_SPACE) {
-                val marker = builder.mark()
-                builder.advanceLexer()
-                marker.done(TokenType.WHITE_SPACE)
-            }
-            
-            if (builder.eof()) break
-            
-            // Check if this is a comment line
-            if (builder.tokenType == FluentTypes.COMMENT_LINE) {
-                // This is a comment, end pattern parsing
-                break
-            }
-            
-            // Check if this is a message boundary (after skipping whitespace)
-            if (isMessageBoundary(builder)) {
-                // New message or term start, end pattern parsing
-                break
-            }
-            
-            // Check if this is an attribute start (DOT followed by SYMBOL and EQ)
-            // Attributes should not be part of the pattern
-            if (builder.tokenType == FluentTypes.DOT && isAttributeStart(builder)) {
-                break
-            }
-            
-            val tokenType = builder.tokenType
-            
-            when (tokenType) {
-                FluentTypes.BRACE_L -> {
-                    parseInlinePlaceable(builder)
+
+        pattern@ while (!builder.eof()) {
+            when (builder.tokenType) {
+                FluentTypes.LINE_END -> {
+                    if (!startsPatternContinuation(builder)) {
+                        break@pattern
+                    }
+                    while (builder.tokenType == FluentTypes.LINE_END && startsPatternContinuation(builder)) {
+                        consumeLeaf(builder)
+                    }
+                    if (builder.tokenType == FluentTypes.INDENT) {
+                        consumeLeaf(builder)
+                    }
                 }
+                FluentTypes.COMMENT_LINE -> break@pattern
+                FluentTypes.BRACE_L -> parseInlinePlaceable(builder)
                 else -> {
-                    // Consume the token as text
+                    if (builder.tokenType == FluentTypes.DOT && isAttributeStart(builder)) {
+                        break@pattern
+                    }
                     val inlineTextMarker = builder.mark()
                     builder.advanceLexer()
                     inlineTextMarker.done(FluentTypes.INLINE_TEXT)
                 }
             }
         }
-        
+
         patternMarker.done(FluentTypes.PATTERN)
     }
-    
-    private fun isAttributeStart(builder: PsiBuilder): Boolean {
-        // Attribute must start with DOT followed by SYMBOL (with optional whitespace in between, but no comments)
-        var lookAheadOffset = 1
-        
-        // Skip whitespace but not comments
-        while (builder.lookAhead(lookAheadOffset) == TokenType.WHITE_SPACE) {
-            lookAheadOffset++
-        }
-        
-        // If there's a comment after the dot, it's not an attribute
-        if (builder.lookAhead(lookAheadOffset) == FluentTypes.COMMENT_LINE) {
-            return false
-        }
-        
-        // If there's no symbol after the dot, it's not an attribute
-        if (builder.lookAhead(lookAheadOffset) != FluentTypes.SYMBOL) {
-            return false
-        }
-        
-        // Check if the symbol is followed by EQ (with optional whitespace and comments in between)
-        var eqOffset = lookAheadOffset + 1
-        while (builder.lookAhead(eqOffset) == TokenType.WHITE_SPACE || builder.lookAhead(eqOffset) == FluentTypes.COMMENT_LINE) {
-            eqOffset++
-        }
-        
-        // If there's no EQ after the symbol, it's not an attribute
-        return builder.lookAhead(eqOffset) == FluentTypes.EQ
-    }
-    
-    private fun hasBlankLineBefore(builder: PsiBuilder): Boolean {
-        // Check if there's a blank line (double newline) before the current position
-        // by examining the original text
-        val originalText = builder.originalText
-        val currentOffset = builder.currentOffset
-
-        // Look backwards for double newline pattern
-        // We need to find \n\n or \n\r\n before the current position
-        var i = currentOffset - 1
-        var foundFirstNewline = false
-        var foundNonWhitespaceAfterFirstNewline = false
-
-        while (i >= 0) {
-            val c = originalText[i]
-            when {
-                c == '\n' -> {
-                    if (foundFirstNewline) {
-                        // Found \n\n pattern - this is a blank line
-                        // But we need to make sure there was no non-whitespace between the two newlines
-                        if (!foundNonWhitespaceAfterFirstNewline) {
-                            return true
-                        }
-                    }
-                    foundFirstNewline = true
-                    foundNonWhitespaceAfterFirstNewline = false
-                }
-                c == '\r' || c == ' ' || c == '\t' -> {
-                    // Skip carriage return, spaces, and tabs
-                }
-                else -> {
-                    // Found non-whitespace character
-                    if (foundFirstNewline) {
-                        // There's content after the first newline, so no blank line
-                        foundNonWhitespaceAfterFirstNewline = true
-                    } else {
-                        // Found non-whitespace before any newline
-                        return false
-                    }
-                }
-            }
-            i--
-        }
-
-        return false
-    }
-
-    private fun hasBlankLineAfter(builder: PsiBuilder): Boolean {
-        // Check if there's a blank line (double newline) after the current position
-        // by examining the original text
-        val originalText = builder.originalText
-        val currentOffset = builder.currentOffset
-
-        // Look forwards for double newline pattern
-        // We need to find \n\n or \n\r\n after the current position
-        // Skip the current character (e.g., DOT) and start from the next character
-        var i = currentOffset + 1
-        var foundFirstNewline = false
-
-        while (i < originalText.length) {
-            val c = originalText[i]
-            when {
-                c == '\n' -> {
-                    if (foundFirstNewline) {
-                        // Found \n\n pattern - this is a blank line
-                        return true
-                    }
-                    foundFirstNewline = true
-                }
-                c == '\r' || c == ' ' || c == '\t' -> {
-                    // Skip carriage return, spaces, and tabs
-                }
-                else -> {
-                    // Found non-whitespace character
-                    return false
-                }
-            }
-            i++
-        }
-
-        return false
-    }
-    
-
 
     private fun parseInlinePlaceable(builder: PsiBuilder) {
         val placeableMarker = builder.mark()
-        
-        // Consume BRACE_L
         builder.advanceLexer()
-        
-        // Track the number of open braces to handle nested placeables
+
         var openBraces = 1
-        
         while (openBraces > 0 && !builder.eof()) {
-            // Check for message boundary before processing each token
             if (isMessageBoundary(builder)) {
-                // New message start, break out of the loop without consuming tokens
-                // Drop the placeable marker to avoid creating an incomplete placeable
                 placeableMarker.drop()
                 return
             }
-            
+
             when (builder.tokenType) {
-                FluentTypes.BRACE_L -> {
-                    // Recursively parse nested placeable
-                    parseInlinePlaceable(builder)
-                }
+                FluentTypes.LINE_END,
+                FluentTypes.INLINE_BLANK,
+                FluentTypes.INDENT,
+                FluentTypes.COMMENT_LINE -> consumeLeaf(builder)
+                FluentTypes.BRACE_L -> parseInlinePlaceable(builder)
                 FluentTypes.BRACE_R -> {
                     openBraces--
-                    if (openBraces > 0) {
-                        builder.advanceLexer()
-                    } else {
-                        // This is the closing brace for the current placeable
-                        builder.advanceLexer()
-                    }
+                    builder.advanceLexer()
                 }
                 FluentTypes.DOLLAR -> {
                     if (startsSelectExpression(builder)) {
@@ -562,47 +192,54 @@ class FluentParser : PsiParser, LightPsiParser {
                 FluentTypes.SYMBOL -> {
                     if (startsSelectExpression(builder)) {
                         parseSelectExpression(builder)
-                    } else if (builder.lookAhead(1) == FluentTypes.PARENTHESIS_L) {
-                        // Parse function reference
+                    } else if (startsFunctionReference(builder)) {
                         parseFunctionReference(builder)
                     } else {
-                        // Parse message reference
                         parseMessageReference(builder)
                     }
                 }
-                FluentTypes.IF_KEYWORD -> {
-                    // Parse select expression
-                    parseSelectExpression(builder)
+                FluentTypes.HYPHEN -> {
+                    if (startsTermReference(builder)) {
+                        parseTermReference(builder)
+                    } else {
+                        val inlineTextMarker = builder.mark()
+                        builder.advanceLexer()
+                        inlineTextMarker.done(FluentTypes.INLINE_TEXT)
+                    }
                 }
+                FluentTypes.IF_KEYWORD -> parseSelectExpression(builder)
                 else -> {
-                    // Consume the token as inline text
                     val inlineTextMarker = builder.mark()
                     builder.advanceLexer()
                     inlineTextMarker.done(FluentTypes.INLINE_TEXT)
                 }
             }
         }
-        
-        // Only create the placeable if we properly closed all braces
+
         if (openBraces == 0) {
             placeableMarker.done(FluentTypes.INLINE_PLACEABLE)
         } else {
-            // Incomplete placeable, drop the marker
             placeableMarker.drop()
         }
     }
 
     private fun parseExpression(builder: PsiBuilder) {
         val expressionMarker = builder.mark()
-        
+
         when (builder.tokenType) {
-            FluentTypes.BRACE_L -> {
-                parseInlinePlaceable(builder)
+            FluentTypes.BRACE_L -> parseInlinePlaceable(builder)
+            FluentTypes.STRING_QUOTE -> parseStringLiteral(builder)
+            FluentTypes.HYPHEN -> {
+                if (startsTermReference(builder)) {
+                    parseTermReference(builder)
+                } else {
+                    builder.advanceLexer()
+                }
             }
             FluentTypes.SYMBOL -> {
                 if (startsSelectExpression(builder)) {
                     parseSelectExpression(builder)
-                } else if (builder.lookAhead(1) == FluentTypes.PARENTHESIS_L) {
+                } else if (startsFunctionReference(builder)) {
                     parseFunctionReference(builder)
                 } else {
                     parseMessageReference(builder)
@@ -615,100 +252,63 @@ class FluentParser : PsiParser, LightPsiParser {
                     parseVariableReference(builder)
                 }
             }
-            FluentTypes.IF_KEYWORD -> {
-                parseSelectExpression(builder)
-            }
-            else -> {
-                builder.advanceLexer()
-            }
-        }
-        
-        expressionMarker.done(FluentTypes.EXPRESSION)
-    }
-    
-    private fun parseSelectExpression(builder: PsiBuilder) {
-        when (builder.tokenType) {
-            FluentTypes.DOLLAR -> parseVariableReference(builder)
-            FluentTypes.SYMBOL -> {
-                if (builder.lookAhead(1) == FluentTypes.PARENTHESIS_L) {
-                    parseFunctionReference(builder)
-                } else {
-                    parseMessageReference(builder)
-                }
-            }
-            FluentTypes.IF_KEYWORD -> builder.advanceLexer()
-            FluentTypes.BRACE_L -> parseInlinePlaceable(builder)
+            FluentTypes.IF_KEYWORD -> parseSelectExpression(builder)
             else -> builder.advanceLexer()
         }
 
-        while (builder.tokenType == TokenType.WHITE_SPACE || builder.tokenType == FluentTypes.COMMENT_LINE) {
-            val marker = builder.mark()
-            val tokenType = builder.tokenType
-            builder.advanceLexer()
-            marker.done(if (tokenType == TokenType.WHITE_SPACE) TokenType.WHITE_SPACE else FluentTypes.COMMENT_LINE)
-        }
-        
-        // Check if we found a message boundary
+        expressionMarker.done(FluentTypes.EXPRESSION)
+    }
+
+    private fun parseSelectExpression(builder: PsiBuilder) {
+        parseSelectSelector(builder)
         if (isMessageBoundary(builder)) {
             return
         }
-        
-        // Consume "->"
+
         if (isArrowOperator(builder)) {
-            // Consume HYPHEN
             builder.advanceLexer()
-            // Skip whitespace between HYPHEN and ANGLE_R
-            while (builder.tokenType == TokenType.WHITE_SPACE || builder.tokenType == FluentTypes.COMMENT_LINE) {
-                val marker = builder.mark()
-                val tokenType = builder.tokenType
-                builder.advanceLexer()
-                marker.done(if (tokenType == TokenType.WHITE_SPACE) TokenType.WHITE_SPACE else FluentTypes.COMMENT_LINE)
-            }
-            // Consume ANGLE_R
+            consumeSpaceAndComments(builder)
             if (builder.tokenType == FluentTypes.ANGLE_R) {
                 builder.advanceLexer()
             }
         }
-        
-        // Parse the cases
+
         while (builder.tokenType != FluentTypes.BRACE_R && !builder.eof() && !isMessageBoundary(builder)) {
-            // Skip whitespace and comments
-            while (builder.tokenType == TokenType.WHITE_SPACE || builder.tokenType == FluentTypes.COMMENT_LINE) {
-                val marker = builder.mark()
-                val tokenType = builder.tokenType
-                builder.advanceLexer()
-                marker.done(if (tokenType == TokenType.WHITE_SPACE) TokenType.WHITE_SPACE else FluentTypes.COMMENT_LINE)
+            consumeSpaceAndComments(builder)
+            if (builder.tokenType == FluentTypes.BRACE_R || isMessageBoundary(builder)) {
+                break
             }
-            
-            if (builder.tokenType == FluentTypes.BRACE_R || isMessageBoundary(builder)) break
-            
-            // Parse case
-            if (builder.tokenType == FluentTypes.STAR) {
-                builder.advanceLexer() // Consume star for default case
+
+            if (startsDefaultVariant(builder)) {
+                builder.advanceLexer()
+                consumeInlineBlanks(builder)
             }
             if (builder.tokenType == FluentTypes.BRACKET_L) {
-                builder.advanceLexer() // Consume BRACKET_L
-
+                builder.advanceLexer()
                 val variantKeyMarker = builder.mark()
                 while (builder.tokenType != FluentTypes.BRACKET_R && !builder.eof() && !isMessageBoundary(builder)) {
                     builder.advanceLexer()
                 }
                 variantKeyMarker.done(FluentTypes.VARIANT_KEY)
-
                 if (builder.tokenType == FluentTypes.BRACKET_R) {
                     builder.advanceLexer()
                 }
             }
-            
-            // Parse case pattern
-            while (builder.tokenType != FluentTypes.BRACKET_L && builder.tokenType != FluentTypes.BRACE_R && !builder.eof() && !isMessageBoundary(builder)) {
-                val currentToken = builder.tokenType
-                if (currentToken == FluentTypes.BRACE_L) {
-                    parseInlinePlaceable(builder)
-                } else {
-                    if (currentToken == TokenType.WHITE_SPACE || currentToken == FluentTypes.COMMENT_LINE) {
-                        builder.advanceLexer()
-                    } else {
+
+            while (
+                builder.tokenType != FluentTypes.BRACKET_L &&
+                !startsDefaultVariant(builder) &&
+                builder.tokenType != FluentTypes.BRACE_R &&
+                !builder.eof() &&
+                !isMessageBoundary(builder)
+            ) {
+                when (builder.tokenType) {
+                    FluentTypes.BRACE_L -> parseInlinePlaceable(builder)
+                    FluentTypes.LINE_END,
+                    FluentTypes.INLINE_BLANK,
+                    FluentTypes.INDENT,
+                    FluentTypes.COMMENT_LINE -> consumeLeaf(builder)
+                    else -> {
                         val inlineTextMarker = builder.mark()
                         builder.advanceLexer()
                         inlineTextMarker.done(FluentTypes.INLINE_TEXT)
@@ -716,120 +316,222 @@ class FluentParser : PsiParser, LightPsiParser {
                 }
             }
         }
-        
-        // Consume the closing brace if it's there
+
+    }
+
+    private fun parseSelectSelector(builder: PsiBuilder) {
+        while (!builder.eof() && !isMessageBoundary(builder) && !isArrowOperator(builder)) {
+            when (builder.tokenType) {
+                FluentTypes.LINE_END,
+                FluentTypes.INLINE_BLANK,
+                FluentTypes.INDENT,
+                FluentTypes.COMMENT_LINE,
+                FluentTypes.INTEGER,
+                FluentTypes.DECIMAL,
+                FluentTypes.ANGLE_L,
+                FluentTypes.ANGLE_R,
+                FluentTypes.EQ,
+                FluentTypes.COLON,
+                FluentTypes.COMMA,
+                FluentTypes.STAR,
+                FluentTypes.IF_KEYWORD -> consumeLeaf(builder)
+                FluentTypes.BRACE_L -> parseBracedSelectorExpression(builder)
+                FluentTypes.DOLLAR -> parseVariableReference(builder)
+                FluentTypes.HYPHEN -> {
+                    if (startsTermReference(builder)) {
+                        parseTermReference(builder)
+                    } else {
+                        consumeLeaf(builder)
+                    }
+                }
+                FluentTypes.SYMBOL -> {
+                    if (startsFunctionReference(builder)) {
+                        parseFunctionReference(builder)
+                    } else {
+                        parseMessageReference(builder)
+                    }
+                }
+                else -> consumeLeaf(builder)
+            }
+        }
+
+        consumeSpaceAndComments(builder)
+    }
+
+    private fun parseBracedSelectorExpression(builder: PsiBuilder) {
+        if (builder.tokenType != FluentTypes.BRACE_L) {
+            return
+        }
+
+        consumeLeaf(builder)
+        consumeSpaceAndComments(builder)
+        if (builder.tokenType != FluentTypes.BRACE_R && !builder.eof() && !isMessageBoundary(builder)) {
+            parseExpression(builder)
+            consumeSpaceAndComments(builder)
+        }
         if (builder.tokenType == FluentTypes.BRACE_R) {
-            builder.advanceLexer()
+            consumeLeaf(builder)
         }
     }
 
     private fun parseFunctionReference(builder: PsiBuilder) {
         val functionMarker = builder.mark()
-        
-        // Parse function ID
+
         val idMarker = builder.mark()
-        builder.advanceLexer() // Consume symbol
+        builder.advanceLexer()
         idMarker.done(FluentTypes.FUNCTION_ID)
-        
-        // Consume PARENTHESIS_L
+        consumeInlineBlanks(builder)
+
         if (builder.tokenType == FluentTypes.PARENTHESIS_L) {
             builder.advanceLexer()
             parseCallArguments(builder)
-            
-            // Consume PARENTHESIS_R
             if (builder.tokenType == FluentTypes.PARENTHESIS_R) {
                 builder.advanceLexer()
             }
         }
-        
+
         functionMarker.done(FluentTypes.FUNCTION_REFERENCE)
     }
 
     private fun parseMessageReference(builder: PsiBuilder) {
         val referenceMarker = builder.mark()
-        
-        // Parse message ID
+
         val messageIdMarker = builder.mark()
-        builder.advanceLexer() // Consume symbol
+        builder.advanceLexer()
         messageIdMarker.done(FluentTypes.MESSAGE_ID)
-        
-        // Handle attribute access (e.g., message.attribute)
+
         while (builder.tokenType == FluentTypes.DOT) {
-            builder.advanceLexer() // Consume DOT
+            builder.advanceLexer()
             if (builder.tokenType == FluentTypes.SYMBOL) {
                 val attributeMarker = builder.mark()
-                builder.advanceLexer() // Consume attribute name
+                builder.advanceLexer()
                 attributeMarker.done(FluentTypes.ATTRIBUTE_ID)
             }
         }
-        
+
         referenceMarker.done(FluentTypes.SYMBOL_REFERENCE)
+    }
+
+    private fun parseTermReference(builder: PsiBuilder) {
+        val referenceMarker = builder.mark()
+
+        val termIdMarker = builder.mark()
+        builder.advanceLexer()
+        if (builder.tokenType == FluentTypes.SYMBOL) {
+            builder.advanceLexer()
+            termIdMarker.done(FluentTypes.TERM_ID)
+        } else {
+            termIdMarker.drop()
+        }
+
+        while (builder.tokenType == FluentTypes.DOT) {
+            builder.advanceLexer()
+            if (builder.tokenType == FluentTypes.SYMBOL) {
+                val attributeMarker = builder.mark()
+                builder.advanceLexer()
+                attributeMarker.done(FluentTypes.ATTRIBUTE_ID)
+            }
+        }
+
+        referenceMarker.done(FluentTypes.SYMBOL_REFERENCE)
+    }
+
+    private fun parseStringLiteral(builder: PsiBuilder) {
+        if (builder.tokenType != FluentTypes.STRING_QUOTE) {
+            return
+        }
+
+        consumeLeaf(builder)
+        while (builder.tokenType != FluentTypes.STRING_QUOTE && !builder.eof()) {
+            when (builder.tokenType) {
+                FluentTypes.STRING_CHAR,
+                FluentTypes.STRING_ESCAPE -> consumeLeaf(builder)
+                FluentTypes.BRACE_L -> parseInlinePlaceable(builder)
+                else -> break
+            }
+        }
+        if (builder.tokenType == FluentTypes.STRING_QUOTE) {
+            consumeLeaf(builder)
+        }
     }
 
     private fun parseVariableReference(builder: PsiBuilder) {
         val variableMarker = builder.mark()
-        
+
         if (builder.tokenType == FluentTypes.DOLLAR) {
             val idMarker = builder.mark()
-            builder.advanceLexer() // Consume DOLLAR
-            
+            builder.advanceLexer()
             if (builder.tokenType == FluentTypes.SYMBOL) {
-                builder.advanceLexer() // Consume symbol
+                builder.advanceLexer()
                 idMarker.done(FluentTypes.VARIABLE_ID)
             } else {
                 idMarker.drop()
             }
         }
-        
+
         variableMarker.done(FluentTypes.VARIABLE_REFERENCE)
     }
 
     private fun parseCallArguments(builder: PsiBuilder) {
         val argumentsMarker = builder.mark()
-        
+
         while (builder.tokenType != FluentTypes.PARENTHESIS_R && !builder.eof()) {
+            consumeSpaceAndComments(builder)
+            if (builder.tokenType == FluentTypes.PARENTHESIS_R || builder.eof()) {
+                break
+            }
             parseArgument(builder)
-            
+            consumeSpaceAndComments(builder)
             if (builder.tokenType == FluentTypes.COMMA) {
-                builder.advanceLexer() // Consume COMMA
+                builder.advanceLexer()
             }
         }
-        
+
         argumentsMarker.done(FluentTypes.CALL_ARGUMENTS)
     }
 
     private fun parseArgument(builder: PsiBuilder) {
         val argumentMarker = builder.mark()
-        
+
         if (builder.tokenType == FluentTypes.SYMBOL && builder.lookAhead(1) == FluentTypes.COLON) {
             parseNamedArgument(builder)
         } else {
             parseExpression(builder)
         }
-        
+
         argumentMarker.done(FluentTypes.ARGUMENT)
     }
 
     private fun parseNamedArgument(builder: PsiBuilder) {
         val namedArgumentMarker = builder.mark()
-        
-        builder.advanceLexer() // Consume symbol
-        builder.advanceLexer() // Consume COLON
+        builder.advanceLexer()
+        builder.advanceLexer()
+        consumeSpaceAndComments(builder)
         parseExpression(builder)
-        
         namedArgumentMarker.done(FluentTypes.NAMED_ARGUMENT)
     }
-    
+
+    private fun consumeInlineBlanks(builder: PsiBuilder) {
+        while (builder.tokenType == FluentTypes.INLINE_BLANK) {
+            consumeLeaf(builder)
+        }
+    }
+
+    private fun consumeSpaceAndComments(builder: PsiBuilder) {
+        while (isSpaceToken(builder.tokenType) || builder.tokenType == FluentTypes.COMMENT_LINE) {
+            consumeLeaf(builder)
+        }
+    }
+
     private fun isArrowOperator(builder: PsiBuilder): Boolean {
         if (builder.tokenType != FluentTypes.HYPHEN) {
             return false
         }
-        
+
         var lookAheadOffset = 1
-        while (builder.lookAhead(lookAheadOffset) == TokenType.WHITE_SPACE || builder.lookAhead(lookAheadOffset) == FluentTypes.COMMENT_LINE) {
+        while (isSpaceToken(builder.lookAhead(lookAheadOffset)) || builder.lookAhead(lookAheadOffset) == FluentTypes.COMMENT_LINE) {
             lookAheadOffset++
         }
-        
         return builder.lookAhead(lookAheadOffset) == FluentTypes.ANGLE_R
     }
 
@@ -840,10 +542,11 @@ class FluentParser : PsiParser, LightPsiParser {
                     false
                 } else {
                     var lookAheadOffset = 2
-                    while (builder.lookAhead(lookAheadOffset) == TokenType.WHITE_SPACE || builder.lookAhead(lookAheadOffset) == FluentTypes.COMMENT_LINE) {
+                    while (isSpaceToken(builder.lookAhead(lookAheadOffset)) || builder.lookAhead(lookAheadOffset) == FluentTypes.COMMENT_LINE) {
                         lookAheadOffset++
                     }
-                    builder.lookAhead(lookAheadOffset) == FluentTypes.HYPHEN && builder.lookAhead(lookAheadOffset + 1) == FluentTypes.ANGLE_R
+                    builder.lookAhead(lookAheadOffset) == FluentTypes.HYPHEN &&
+                        builder.lookAhead(lookAheadOffset + 1) == FluentTypes.ANGLE_R
                 }
             }
             FluentTypes.SYMBOL -> {
@@ -864,80 +567,153 @@ class FluentParser : PsiParser, LightPsiParser {
                         lookAheadOffset++
                     }
                 }
-                while (builder.lookAhead(lookAheadOffset) == TokenType.WHITE_SPACE || builder.lookAhead(lookAheadOffset) == FluentTypes.COMMENT_LINE) {
+                while (isSpaceToken(builder.lookAhead(lookAheadOffset)) || builder.lookAhead(lookAheadOffset) == FluentTypes.COMMENT_LINE) {
                     lookAheadOffset++
                 }
-                builder.lookAhead(lookAheadOffset) == FluentTypes.HYPHEN && builder.lookAhead(lookAheadOffset + 1) == FluentTypes.ANGLE_R
+                builder.lookAhead(lookAheadOffset) == FluentTypes.HYPHEN &&
+                    builder.lookAhead(lookAheadOffset + 1) == FluentTypes.ANGLE_R
             }
             FluentTypes.IF_KEYWORD -> true
             else -> false
         }
     }
-    
-    private fun isMessageStart(builder: PsiBuilder): Boolean {
-        var lookAheadOffset = 1
-        while (builder.lookAhead(lookAheadOffset) == TokenType.WHITE_SPACE || builder.lookAhead(lookAheadOffset) == FluentTypes.COMMENT_LINE) {
+
+    private fun isMessageStart(builder: PsiBuilder): Boolean = isMessageStart(builder, 0)
+
+    private fun isMessageStart(builder: PsiBuilder, startOffset: Int): Boolean {
+        if (builder.lookAhead(startOffset) != FluentTypes.SYMBOL) {
+            return false
+        }
+        var lookAheadOffset = startOffset + 1
+        while (builder.lookAhead(lookAheadOffset) == FluentTypes.INLINE_BLANK) {
             lookAheadOffset++
         }
         return builder.lookAhead(lookAheadOffset) == FluentTypes.EQ
     }
-    
-    private fun isTermStart(builder: PsiBuilder): Boolean {
-        var lookAheadOffset = 1
-        while (builder.lookAhead(lookAheadOffset) == TokenType.WHITE_SPACE || builder.lookAhead(lookAheadOffset) == FluentTypes.COMMENT_LINE) {
-            lookAheadOffset++
-        }
-        if (builder.lookAhead(lookAheadOffset) != FluentTypes.SYMBOL) {
+
+    private fun isTermStart(builder: PsiBuilder): Boolean = isTermStart(builder, 0)
+
+    private fun isTermStart(builder: PsiBuilder, startOffset: Int): Boolean {
+        if (builder.lookAhead(startOffset) != FluentTypes.HYPHEN || builder.lookAhead(startOffset + 1) != FluentTypes.SYMBOL) {
             return false
         }
-        
-        var eqOffset = lookAheadOffset + 1
-        while (builder.lookAhead(eqOffset) == TokenType.WHITE_SPACE || builder.lookAhead(eqOffset) == FluentTypes.COMMENT_LINE) {
+        var eqOffset = startOffset + 2
+        while (builder.lookAhead(eqOffset) == FluentTypes.INLINE_BLANK) {
             eqOffset++
         }
         return builder.lookAhead(eqOffset) == FluentTypes.EQ
     }
-    
-    private fun isMessageBoundary(builder: PsiBuilder): Boolean {
-        return isMessageBoundary(builder, 0)
+
+    private fun isAttributeStart(builder: PsiBuilder): Boolean = isAttributeStart(builder, 0)
+
+    private fun isAttributeStart(builder: PsiBuilder, startOffset: Int): Boolean {
+        if (builder.lookAhead(startOffset) != FluentTypes.DOT || builder.lookAhead(startOffset + 1) != FluentTypes.SYMBOL) {
+            return false
+        }
+        var eqOffset = startOffset + 2
+        while (builder.lookAhead(eqOffset) == FluentTypes.INLINE_BLANK) {
+            eqOffset++
+        }
+        return builder.lookAhead(eqOffset) == FluentTypes.EQ
     }
-    
-    private fun isMessageBoundary(builder: PsiBuilder, startOffset: Int): Boolean {
-        // Skip whitespace and comments
-        var lookAheadOffset = startOffset
-        while (builder.lookAhead(lookAheadOffset) == TokenType.WHITE_SPACE || builder.lookAhead(lookAheadOffset) == FluentTypes.COMMENT_LINE) {
+
+    private fun startsDefaultVariant(builder: PsiBuilder): Boolean = startsDefaultVariant(builder, 0)
+
+    private fun startsDefaultVariant(builder: PsiBuilder, startOffset: Int): Boolean {
+        if (builder.lookAhead(startOffset) != FluentTypes.STAR) {
+            return false
+        }
+        var lookAheadOffset = startOffset + 1
+        while (builder.lookAhead(lookAheadOffset) == FluentTypes.INLINE_BLANK) {
+            lookAheadOffset++
+        }
+        return builder.lookAhead(lookAheadOffset) == FluentTypes.BRACKET_L
+    }
+
+    private fun startsFunctionReference(builder: PsiBuilder): Boolean = startsFunctionReference(builder, 0)
+
+    private fun startsFunctionReference(builder: PsiBuilder, startOffset: Int): Boolean {
+        if (builder.lookAhead(startOffset) != FluentTypes.SYMBOL) {
+            return false
+        }
+        var lookAheadOffset = startOffset + 1
+        while (builder.lookAhead(lookAheadOffset) == FluentTypes.INLINE_BLANK) {
+            lookAheadOffset++
+        }
+        return builder.lookAhead(lookAheadOffset) == FluentTypes.PARENTHESIS_L
+    }
+
+    private fun startsTermReference(builder: PsiBuilder): Boolean = startsTermReference(builder, 0)
+
+    private fun startsTermReference(builder: PsiBuilder, startOffset: Int): Boolean {
+        return builder.lookAhead(startOffset) == FluentTypes.HYPHEN &&
+            builder.lookAhead(startOffset + 1) == FluentTypes.SYMBOL
+    }
+
+    private fun startsAttributeAfterLineEnd(builder: PsiBuilder): Boolean {
+        if (builder.tokenType != FluentTypes.LINE_END) {
+            return false
+        }
+        var lookAheadOffset = 1
+        if (builder.lookAhead(lookAheadOffset) == FluentTypes.INDENT) {
+            lookAheadOffset++
+        }
+        return isAttributeStart(builder, lookAheadOffset)
+    }
+
+    private fun startsPatternContinuation(builder: PsiBuilder): Boolean {
+        if (builder.tokenType != FluentTypes.LINE_END) {
+            return false
+        }
+
+        var lookAheadOffset = 1
+        while (builder.lookAhead(lookAheadOffset) == FluentTypes.LINE_END) {
             lookAheadOffset++
         }
 
-        // Check if this is a new message start (SYMBOL followed by EQ)
-        if (builder.lookAhead(lookAheadOffset) == FluentTypes.SYMBOL) {
-            var eqOffset = lookAheadOffset + 1
-            while (builder.lookAhead(eqOffset) == TokenType.WHITE_SPACE || builder.lookAhead(eqOffset) == FluentTypes.COMMENT_LINE) {
-                eqOffset++
-            }
-            if (builder.lookAhead(eqOffset) == FluentTypes.EQ) {
-                return true
-            }
+        if (builder.lookAhead(lookAheadOffset) != FluentTypes.INDENT) {
+            return false
         }
 
-        // Check if this is a term start (HYPHEN followed by SYMBOL and EQ)
-        if (builder.lookAhead(lookAheadOffset) == FluentTypes.HYPHEN) {
-            var symbolOffset = lookAheadOffset + 1
-            while (builder.lookAhead(symbolOffset) == TokenType.WHITE_SPACE || builder.lookAhead(symbolOffset) == FluentTypes.COMMENT_LINE) {
-                symbolOffset++
+        val contentOffset = lookAheadOffset + 1
+        val next = builder.lookAhead(contentOffset)
+        if (
+            next == null ||
+            next == FluentTypes.LINE_END ||
+            next == FluentTypes.COMMENT_LINE
+        ) {
+            return false
+        }
+        return !isAttributeStart(builder, contentOffset)
+    }
+
+    private fun isMessageBoundary(builder: PsiBuilder): Boolean = isMessageBoundary(builder, 0)
+
+    private fun isMessageBoundary(builder: PsiBuilder, startOffset: Int): Boolean {
+        if (isMessageStart(builder, startOffset) || isTermStart(builder, startOffset)) {
+            return true
+        }
+
+        var lookAheadOffset = startOffset
+        while (builder.lookAhead(lookAheadOffset) == FluentTypes.LINE_END) {
+            lookAheadOffset++
+            if (builder.lookAhead(lookAheadOffset) == FluentTypes.INDENT) {
+                return false
             }
-            if (builder.lookAhead(symbolOffset) == FluentTypes.SYMBOL) {
-                var eqOffset = symbolOffset + 1
-                while (builder.lookAhead(eqOffset) == TokenType.WHITE_SPACE || builder.lookAhead(eqOffset) == FluentTypes.COMMENT_LINE) {
-                    eqOffset++
-                }
-                if (builder.lookAhead(eqOffset) == FluentTypes.EQ) {
-                    return true
-                }
+            if (builder.lookAhead(lookAheadOffset) == FluentTypes.COMMENT_LINE) {
+                return true
+            }
+            if (isMessageStart(builder, lookAheadOffset) || isTermStart(builder, lookAheadOffset)) {
+                return true
             }
         }
 
         return false
     }
 
+    private fun isSpaceToken(tokenType: IElementType?): Boolean {
+        return tokenType == FluentTypes.LINE_END ||
+            tokenType == FluentTypes.INLINE_BLANK ||
+            tokenType == FluentTypes.INDENT
+    }
 }

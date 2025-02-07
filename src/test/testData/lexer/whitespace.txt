@@ -1,0 +1,5 @@
+FluentToken.INDENT ('   ')
+FluentToken.LINE_END ('\n')
+FluentToken.INDENT ('  ')
+FluentToken.INLINE_BLANK ('	  ')
+FluentToken.LINE_END ('\n')

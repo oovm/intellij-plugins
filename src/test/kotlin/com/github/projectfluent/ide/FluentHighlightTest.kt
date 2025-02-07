@@ -16,5 +16,14 @@ class FluentHighlightTest : BasePlatformTestCase() {
         myFixture.configureByFile("highlighting/test-keys.ftl")
         myFixture.checkHighlighting()
     }
-}
 
+    fun testDotMessage() {
+        myFixture.configureByFile("highlighting/dot-message.ftl")
+        myFixture.checkHighlighting()
+    }
+
+    fun testStringInterpolation() {
+        myFixture.configureByFile("highlighting/string-interpolation.ftl")
+        myFixture.checkHighlighting()
+    }
+}
