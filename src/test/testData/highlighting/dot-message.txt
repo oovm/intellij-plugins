@@ -1,0 +1,5 @@
+<SYM_MESSAGE>title</SYM_MESSAGE> = This thing
+
+<SYM_MESSAGE>description</SYM_MESSAGE> = Blah blah blah.
+
+<SYM_MESSAGE>message</SYM_MESSAGE> = This is message!

@@ -1,0 +1,13 @@
+# Test all three key types
+<SYM_MESSAGE>hello</SYM_MESSAGE> = Hello, world! # MESSAGE_ID
+
+<SYM_MESSAGE>welcome</SYM_MESSAGE> = 
+  <SYM_ATTRIBUTE>.title</SYM_ATTRIBUTE> = Welcome # ATTRIBUTE_ID
+  <SYM_ATTRIBUTE>.message</SYM_ATTRIBUTE> = Welcome to our website, {<SYM_VARIABLE>$userName</SYM_VARIABLE>}!
+
+<SYM_TERM>-brand-name</SYM_TERM> = 
+  <SYM_ATTRIBUTE>.short</SYM_ATTRIBUTE> = MyApp # ATTRIBUTE_ID
+  <SYM_ATTRIBUTE>.long</SYM_ATTRIBUTE> = My Application # ATTRIBUTE_ID
+
+# Test term
+<SYM_TERM>-term</SYM_TERM> = This is a term # TERM_ID

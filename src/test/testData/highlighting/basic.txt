@@ -1,0 +1,2 @@
+# Comment line
+<SYM_MESSAGE>hello</SYM_MESSAGE> = Hello, {<SYM_VARIABLE>$userName</SYM_VARIABLE>}!
