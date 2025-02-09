@@ -4,6 +4,13 @@
 
 ## [Unreleased]
 
+## [0.4.6]
+### Added
+- Replace the `Flex` parser with a handwritten parser
+- Change the line-based parser to a segment-based parser
+### Removed
+- Drop `Flex` support
+
 ## [0.4.3]
 ### Fixed
 - Fix missing api incompatible for (`261.*`)
