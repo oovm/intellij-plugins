@@ -70,11 +70,19 @@ class FluentFormatBlock(
                 else -> Indent.getNormalIndent()
             }
 
-            FluentTypes.SELECT_EXPRESSION -> Indent.getNormalIndent()
-            FluentTypes.VARIANT -> Indent.getNormalIndent()
-            FluentTypes.PATTERN -> Indent.getNormalIndent()
-            FluentTypes.BLOCK_PLACEABLE -> Indent.getNormalIndent()
-            FluentTypes.CALL_ARGUMENTS -> Indent.getNormalIndent()
+            // Only line-structure boundaries should add indentation.
+            // Wrapper nodes like PATTERN/BLOCK_PLACEABLE/CALL_ARGUMENTS would
+            // otherwise stack indentation on every AST level and produce
+            // wildly over-indented Fluent continuations.
+            FluentTypes.SELECT_EXPRESSION -> when (child.elementType) {
+                FluentTypes.VARIANT -> Indent.getNormalIndent()
+                else -> Indent.getNoneIndent()
+            }
+
+            FluentTypes.VARIANT,
+            FluentTypes.PATTERN,
+            FluentTypes.BLOCK_PLACEABLE,
+            FluentTypes.CALL_ARGUMENTS -> Indent.getNoneIndent()
             else -> Indent.getNoneIndent()
         }
     }
