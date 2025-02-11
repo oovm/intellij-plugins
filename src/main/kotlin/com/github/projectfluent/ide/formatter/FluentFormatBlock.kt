@@ -20,11 +20,14 @@ class FluentFormatBlock(
         node.getChildren(null).any { it.elementType is PsiErrorElement } || FormatterUtil.isIncomplete(node)
     }
 
+    private val visibleChildren: List<ASTNode> by lazy {
+        node.getChildren(null).filter { !it.isWhitespaceOrEmpty() }
+    }
+
     private val mySubBlocks: List<Block> by lazy { buildChildren() }
 
     private fun buildChildren(): List<Block> {
-        return node.getChildren(null)
-            .filter { !it.isWhitespaceOrEmpty() }
+        return visibleChildren
             .map { childNode ->
                 FluentFormatBlock(
                     node = childNode,
@@ -55,15 +58,21 @@ class FluentFormatBlock(
     override fun isIncomplete(): Boolean = myIsIncomplete
 
     override fun getChildAttributes(newChildIndex: Int): ChildAttributes {
-        val indent = when (node.psi) {
-            // is FluentAttribute -> Indent.getNormalIndent()
+        val indent = when (node.elementType) {
+            FluentTypes.MESSAGE,
+            FluentTypes.TERM,
+            FluentTypes.ATTRIBUTE,
+            FluentTypes.PATTERN,
+            FluentTypes.SELECT_EXPRESSION,
+            FluentTypes.VARIANT -> Indent.getNormalIndent()
             else -> Indent.getNoneIndent()
         }
         return ChildAttributes(indent, null)
     }
 
     private fun computeIndent(child: ASTNode): Indent? {
-        val firstLine = node.firstChildNode == child
+        val firstVisibleChild = visibleChildren.firstOrNull()
+        val firstLine = firstVisibleChild == child
         return when (node.elementType) {
             FluentTypes.MESSAGE, FluentTypes.TERM, FluentTypes.ATTRIBUTE -> when {
                 firstLine -> Indent.getNoneIndent()

@@ -5,10 +5,12 @@ import com.intellij.formatting.Block
 import com.intellij.formatting.Spacing
 import com.intellij.lang.ASTNode
 import com.github.projectfluent.language.psi.FluentTypes
+import com.intellij.psi.TokenType
 
 
 fun ASTNode?.isWhitespaceOrEmpty(): Boolean {
     return this == null || textLength == 0 || elementType in setOf(
+        TokenType.WHITE_SPACE,
         FluentTypes.LINE_END,
         FluentTypes.INLINE_BLANK,
         FluentTypes.INDENT
