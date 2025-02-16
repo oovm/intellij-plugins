@@ -21,7 +21,7 @@ class FluentFormatBlock(
     }
 
     private val visibleChildren: List<ASTNode> by lazy {
-        node.getChildren(null).filter { !it.isWhitespaceOrEmpty() }
+        node.getChildren(null).filterNot(::shouldSkipChild)
     }
 
     private val mySubBlocks: List<Block> by lazy { buildChildren() }
@@ -83,16 +83,32 @@ class FluentFormatBlock(
             // Wrapper nodes like PATTERN/BLOCK_PLACEABLE/CALL_ARGUMENTS would
             // otherwise stack indentation on every AST level and produce
             // wildly over-indented Fluent continuations.
-            FluentTypes.SELECT_EXPRESSION -> when (child.elementType) {
-                FluentTypes.VARIANT -> Indent.getNormalIndent()
-                else -> Indent.getNoneIndent()
-            }
+            FluentTypes.SELECT_EXPRESSION -> Indent.getNormalIndent()
 
             FluentTypes.VARIANT,
             FluentTypes.PATTERN,
             FluentTypes.BLOCK_PLACEABLE,
             FluentTypes.CALL_ARGUMENTS -> Indent.getNoneIndent()
             else -> Indent.getNoneIndent()
+        }
+    }
+
+    private fun shouldSkipChild(child: ASTNode): Boolean {
+        if (child.isWhitespaceOrEmpty()) {
+            return true
+        }
+
+        if (child.elementType != FluentTypes.INLINE_BLANK) {
+            return false
+        }
+
+        return when (node.elementType) {
+            // In textual contexts, INLINE_BLANK is part of the content and
+            // dropping it makes formatter merge or arbitrarily split words.
+            FluentTypes.PATTERN,
+            FluentTypes.SELECT_EXPRESSION,
+            FluentTypes.INLINE_PLACEABLE -> false
+            else -> true
         }
     }
 }

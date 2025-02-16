@@ -12,7 +12,6 @@ fun ASTNode?.isWhitespaceOrEmpty(): Boolean {
     return this == null || textLength == 0 || elementType in setOf(
         TokenType.WHITE_SPACE,
         FluentTypes.LINE_END,
-        FluentTypes.INLINE_BLANK,
         FluentTypes.INDENT
     )
 }

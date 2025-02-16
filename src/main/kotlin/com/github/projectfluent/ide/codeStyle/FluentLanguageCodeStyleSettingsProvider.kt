@@ -53,6 +53,8 @@ class FluentLanguageCodeStyleSettingsProvider : LanguageCodeStyleSettingsProvide
         commonSettings.LINE_COMMENT_ADD_SPACE = true
         commonSettings.BLOCK_COMMENT_AT_FIRST_COLUMN = false
 
+        indentOptions.INDENT_SIZE = 4
+        indentOptions.TAB_SIZE = 4
         indentOptions.CONTINUATION_INDENT_SIZE = indentOptions.INDENT_SIZE
     }
 
