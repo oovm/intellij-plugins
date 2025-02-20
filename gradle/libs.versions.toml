@@ -7,6 +7,7 @@ changelog = "2.5.0"
 intelliJPlatform = "2.19.0"
 kotlin = "2.4.20"
 kover = "0.9.9"
+qodana = "2026.2.1"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -14,5 +15,7 @@ junit = { group = "junit", name = "junit", version.ref = "junit" }
 [plugins]
 changelog = { id = "org.jetbrains.changelog", version.ref = "changelog" }
 intelliJPlatform = { id = "org.jetbrains.intellij.platform", version.ref = "intelliJPlatform" }
+intelliJPlatformModule = { id = "org.jetbrains.intellij.platform.module", version.ref = "intelliJPlatform" }
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
+qodana = { id = "org.jetbrains.qodana", version.ref = "qodana" }
