@@ -81,10 +81,8 @@
 		<langCodeStyleSettingsProvider
 			implementation="com.github.projectfluent.ide.codeStyle.FluentLanguageCodeStyleSettingsProvider"
 		/>
-		<!--		<languageInjectionContributor-->
-		<!--			language="Fluent"-->
-		<!--			implementationClass="com.github.projectfluent.ide.highlight.InjectMarkdown"-->
-		<!--		/-->
+		<!-- Markdown fence injection stays off until SimpleInjection is wired for MarkdownCodeFence. -->
+		<!-- InjectVue must stay on multiHostInjector (implements MultiHostInjector, not LanguageInjectionContributor). -->
 		<multiHostInjector implementation="com.github.projectfluent.ide.highlight.InjectVue"/>
 
 		<psi.referenceContributor implementation="com.github.projectfluent.ide.reference.FluentReferenceContributor"/>
