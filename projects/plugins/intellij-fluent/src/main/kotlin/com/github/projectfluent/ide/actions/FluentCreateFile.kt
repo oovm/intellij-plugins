@@ -7,15 +7,21 @@ import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiDirectory
 
 class FluentCreateFile :
-    CreateFileFromTemplateAction(com.github.projectfluent.FluentBundle.message("action.create_file"), com.github.projectfluent.FluentBundle.message("action.create_file.description"), com.github.projectfluent.language.file.FluentIcons.FILE) {
+    CreateFileFromTemplateAction(
+        com.github.projectfluent.FluentBundle.message("action.create_file"),
+        com.github.projectfluent.FluentBundle.message("action.create_file.description"),
+        FluentIcons.FILE,
+    ) {
     companion object {
         // See [resources/colors/fileTemplate]
-        private const val templatePath = "Fluent File";
+        private const val templatePath = "Fluent File"
     }
 
     override fun buildDialog(project: Project, directory: PsiDirectory, builder: Builder) {
-        builder.setTitle(com.github.projectfluent.FluentBundle.message("action.create_file")).addKind("Empty file", FluentIcons.FILE!!, templatePath)
+        builder.setTitle(com.github.projectfluent.FluentBundle.message("action.create_file"))
+            .addKind("Empty file", FluentIcons.FILE, templatePath)
     }
 
-    override fun getActionName(directory: PsiDirectory, newName: String, templateName: String): String = com.github.projectfluent.FluentBundle.message("action.create_file")
+    override fun getActionName(directory: PsiDirectory, newName: String, templateName: String): String =
+        com.github.projectfluent.FluentBundle.message("action.create_file")
 }
