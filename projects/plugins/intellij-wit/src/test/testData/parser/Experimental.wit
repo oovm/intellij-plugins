@@ -1,0 +1,21 @@
+package docs:example;
+
+@refine(not-nan)
+type non-nan-f32 = f32;
+
+interface numbers {
+  @predicate
+  try-refine: func(raw: u8) -> result<_, string>;
+
+  @refine(range(1..42))
+  type bounded-u8 = u8;
+}
+
+record coord {
+  x: u32,
+  y: u32,
+}
+
+extend coord with {
+  static add: func(lhs: coord, rhs: coord) -> coord;
+}

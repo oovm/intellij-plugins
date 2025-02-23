@@ -1,0 +1,6 @@
+@refine(range(1..42))
+type bounded = u8;
+
+extend coord with {
+  static add: func();
+}

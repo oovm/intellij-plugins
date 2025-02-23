@@ -1,0 +1,11 @@
+package docs:example;
+
+interface greet {
+  use { greeting, farewell };
+
+  greet: func(name: string) -> string;
+}
+
+world hello {
+  export greet;
+}
