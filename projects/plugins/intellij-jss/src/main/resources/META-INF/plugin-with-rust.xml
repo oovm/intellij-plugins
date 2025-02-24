@@ -1,0 +1,5 @@
+<idea-plugin>
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- todo: goto definition and other fellows! -->
+    </extensions>
+</idea-plugin>

@@ -1,0 +1,10 @@
+{
+    "generations": [
+        {
+            "mode": "client",
+            "plan": "kotlin:protobuf",
+            "java_out": "../main/gen",
+            "kotlin_out": "../main/kotlin"
+        }
+    ]
+}

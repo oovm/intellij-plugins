@@ -21,9 +21,16 @@ repositories {
 
 dependencies {
     implementation(libs.junit)
+    implementation("com.google.protobuf:protobuf-java:3.25.5")
+    implementation("com.google.protobuf:protobuf-kotlin:3.25.5")
 
     intellijPlatform {
         intellijIdeaUltimate(providers.gradleProperty("platformVersion"))
+        bundledPlugins(
+            providers.gradleProperty("platformBundledPlugins").map {
+                it.split(',').map(String::trim).filter(String::isNotEmpty)
+            },
+        )
     }
 }
 

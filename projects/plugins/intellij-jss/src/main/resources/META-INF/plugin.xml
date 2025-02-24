@@ -1,0 +1,89 @@
+<idea-plugin>
+	<id>com.github.voml.jss_intellij</id>
+	<name>JSS Support</name>
+	<vendor>voml</vendor>
+	<!-- Product and plugin compatibility requirements -->
+	<!-- https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html -->
+	<depends>com.intellij.modules.platform</depends>
+	<depends>com.intellij.modules.json</depends>
+	<!--    <depends optional="true" config-file="plugin-with-rust.xml">org.rust.lang</depends>-->
+	<resource-bundle>messages.VosBundle</resource-bundle>
+	<extensions defaultExtensionNs="com.intellij">
+		<fileType
+			name="VOS"
+			language="VOS"
+			extensions="vos"
+			implementationClass="vos.surface.file.VosFileType"
+			fieldName="INSTANCE"/>
+		<lang.parserDefinition
+			language="VOS"
+			implementationClass="vos.surface.file.VosParserDefinition"/>
+		<projectViewNestingRulesProvider implementation="vos.surface.file.FileGroup"/>
+		<!-- Highlight -->
+		<additionalTextAttributes scheme="Default" file="colors/JssDefault.xml"/>
+		<additionalTextAttributes scheme="Darcula" file="colors/JssDarcula.xml"/>
+		<annotator language="VOS" implementationClass="vos.semantics.inspect.EscapeAnnotator"/>
+		<colorSettingsPage implementation="vos.editing.highlight.ColorSettings"/>
+		<highlightVisitor implementation="vos.editing.highlight.HighlightAST"/>
+		<lang.syntaxHighlighter
+			language="VOS"
+			implementationClass="vos.editing.highlight.HighlightToken"/>
+		<!-- View -->
+		<lang.psiStructureViewFactory
+			language="VOS"
+			implementationClass="vos.editing.structure.ViewFactory"/>
+		<!-- Formatter -->
+		<lang.formatter
+			language="VOS"
+			implementationClass="vos.editing.format.FormatBuilder"/>
+		<lang.commenter
+			language="VOS"
+			implementationClass="vos.editing.format.Commenter"/>
+		<lang.smartEnterProcessor
+			language="VOS"
+			implementationClass="vos.editing.format.SmartEnter"/>
+		<!-- Document -->
+		<!--documentationProvider implementation="vos.editing.documentation.JssDocumentationExtender"-->
+		<!--		<psi.referenceContributor implementation="vos.editing.documentation.JssUrlReferenceContributor"/>-->
+		<lang.documentationProvider
+			language="VOS"
+			implementationClass="vos.editing.documentation.DocumentationProvider"/>
+		<lang.braceMatcher
+			language="VOS"
+			implementationClass="vos.editing.assist.JssBraceMatcher"/>
+		<lang.quoteHandler
+			language="VOS"
+			implementationClass="vos.editing.assist.JssQuoteHandler"/>
+		<lang.foldingBuilder
+			language="VOS"
+			implementationClass="vos.editing.assist.JssFoldingBuilder"/>
+		<indexPatternBuilder
+			implementation="vos.editing.todo.TodoIndexPatternBuilder"/>
+		<todoIndexer
+			filetype="JSS"
+			implementationClass="vos.editing.todo.TodoIndexer"/>
+		<completion.contributor
+			language="VOS"
+			implementationClass="vos.editing.completion.CompletionContributor"/>
+
+
+		<langCodeStyleSettingsProvider
+			implementation="vos.editing.format.codestyle.CodeStyleSettingProvider"/>
+
+	</extensions>
+	<actions>
+		<action id="NewJssFile" class="vos.editing.actions.CreateFile">
+			<add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewHtmlFile"/>
+		</action>
+		<action id="jss.JssConvertJson"
+				class="vos.editing.actions.JssConvertJson"/>
+		<group id="jss.JssGenerator" popup="true" text="JssGenerator">
+			<reference ref="NewJssFile"/>
+			<reference ref="jss.JssConvertJson"/>
+			<add-to-group group-id="EditorPopupMenu" anchor="after" relative-to-action="Github.Create.Gist"/>
+			<add-to-group group-id="ProjectViewPopupMenu" anchor="after" relative-to-action="Github.Create.Gist"/>
+			<add-to-group group-id="EditorTabPopupMenu" anchor="after" relative-to-action="Github.Create.Gist"/>
+			<add-to-group group-id="ConsoleEditorPopupMenu" anchor="after" relative-to-action="Github.Create.Gist"/>
+		</group>
+	</actions>
+</idea-plugin>

@@ -1,0 +1,5 @@
+class Point3D {
+    x
+    y: f32
+    z: f32 = 1.0
+}
