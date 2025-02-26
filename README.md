@@ -5,12 +5,14 @@ Multi-plugin workspace for JetBrains Marketplace plugins and one shared library.
 | Path | Role |
 |------|------|
 | [`projects/plugins/intellij-fluent`](projects/plugins/intellij-fluent) | Fluent language plugin (`README.md` / `CHANGELOG.md` live here) |
+| [`projects/plugins/intellij-jss`](projects/plugins/intellij-jss) | JSS language plugin (`.jss`) |
+| [`projects/plugins/intellij-wit`](projects/plugins/intellij-wit) | WIT IDL plugin (`.wit` / `.witx`) |
 | [`projects/packages`](projects/packages) | Shared code-only library (`:packages`) |
 | [`projects/designs`](projects/designs) | Brand assets |
 
 ```bash
 ./gradlew runIde          # load every :plugins/* together
-./gradlew buildPlugins    # separate zip per plugin
+./gradlew buildPlugins    # zip per plugin, collected in build/
 ./gradlew ciVerify
 ```
 
