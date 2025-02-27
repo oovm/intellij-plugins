@@ -10,7 +10,7 @@ import com.intellij.psi.PsiErrorElement
 import com.intellij.psi.formatter.FormatterUtil
 
 class FluentFormatBlock(
-    private val node: ASTNode,
+    internal val node: ASTNode,
     private val alignment: Alignment?,
     private val indent: Indent?,
     private val wrap: Wrap?,
@@ -64,28 +64,35 @@ class FluentFormatBlock(
             FluentTypes.ATTRIBUTE,
             FluentTypes.PATTERN,
             FluentTypes.SELECT_EXPRESSION,
-            FluentTypes.VARIANT -> Indent.getNormalIndent()
+            FluentTypes.VARIANT,
+            FluentTypes.DEFAULT_VARIANT -> Indent.getNormalIndent()
             else -> Indent.getNoneIndent()
         }
         return ChildAttributes(indent, null)
     }
 
     private fun computeIndent(child: ASTNode): Indent? {
-        val firstVisibleChild = visibleChildren.firstOrNull()
-        val firstLine = firstVisibleChild == child
         return when (node.elementType) {
             FluentTypes.MESSAGE, FluentTypes.TERM, FluentTypes.ATTRIBUTE -> when {
-                firstLine -> Indent.getNoneIndent()
-                else -> Indent.getNormalIndent()
+                // Only the value / nested attributes take a continuation indent (#5).
+                child.elementType == FluentTypes.PATTERN ||
+                    child.elementType == FluentTypes.ATTRIBUTE -> Indent.getNormalIndent()
+                else -> Indent.getNoneIndent()
             }
 
-            // Only line-structure boundaries should add indentation.
-            // Wrapper nodes like PATTERN/BLOCK_PLACEABLE/CALL_ARGUMENTS would
-            // otherwise stack indentation on every AST level and produce
-            // wildly over-indented Fluent continuations.
-            FluentTypes.SELECT_EXPRESSION -> Indent.getNormalIndent()
+            // Indent select arms once; selector / braces stay flat (#5).
+            // DEFAULT_VARIANT is one space shallower so `*[other]` aligns `[` with siblings.
+            FluentTypes.SELECT_EXPRESSION -> when (child.elementType) {
+                FluentTypes.VARIANT -> Indent.getNormalIndent()
+                FluentTypes.DEFAULT_VARIANT -> {
+                    val indentSize = space.commonSettings.indentOptions?.INDENT_SIZE ?: 2
+                    Indent.getSpaceIndent((indentSize - 1).coerceAtLeast(0))
+                }
+                else -> Indent.getNoneIndent()
+            }
 
             FluentTypes.VARIANT,
+            FluentTypes.DEFAULT_VARIANT,
             FluentTypes.PATTERN,
             FluentTypes.BLOCK_PLACEABLE,
             FluentTypes.CALL_ARGUMENTS -> Indent.getNoneIndent()
@@ -103,11 +110,12 @@ class FluentFormatBlock(
         }
 
         return when (node.elementType) {
-            // In textual contexts, INLINE_BLANK is part of the content and
-            // dropping it makes formatter merge or arbitrarily split words.
+            // Keep blanks in textual nodes; dropping them merges words or splits variant arms (#5).
             FluentTypes.PATTERN,
             FluentTypes.SELECT_EXPRESSION,
-            FluentTypes.INLINE_PLACEABLE -> false
+            FluentTypes.INLINE_PLACEABLE,
+            FluentTypes.VARIANT,
+            FluentTypes.DEFAULT_VARIANT -> false
             else -> true
         }
     }

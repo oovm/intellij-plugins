@@ -52,6 +52,15 @@ data class FluentFormatSpace(
                 .after(FluentTypes.COLON).spacing(1, 1, 0, false, 0)
                 // k = v
                 .around(FluentTypes.EQ).spacing(1, 1, 0, commonSettings.KEEP_LINE_BREAKS, 0)
+                // `$var ->` selector spacing (#5)
+                .between(FluentTypes.VARIABLE_REFERENCE, FluentTypes.HYPHEN).spacing(1, 1, 0, false, 0)
+                .between(FluentTypes.FUNCTION_REFERENCE, FluentTypes.HYPHEN).spacing(1, 1, 0, false, 0)
+                // Select arms: one newline + indent from FormatBlock; ignore source line breaks (#5)
+                .between(FluentTypes.ANGLE_R, FluentTypes.VARIANT).spacing(0, 0, 1, false, 1)
+                .between(FluentTypes.ANGLE_R, FluentTypes.DEFAULT_VARIANT).spacing(0, 0, 1, false, 1)
+                .between(FluentTypes.VARIANT, FluentTypes.VARIANT).spacing(0, 0, 1, false, 1)
+                .between(FluentTypes.VARIANT, FluentTypes.DEFAULT_VARIANT).spacing(0, 0, 1, false, 1)
+                .between(FluentTypes.DEFAULT_VARIANT, FluentTypes.VARIANT).spacing(0, 0, 1, false, 1)
 
             return custom
                 .before(remove_space_before).spaceIf(false)

@@ -260,8 +260,11 @@ class FluentParser : PsiParser, LightPsiParser {
     }
 
     private fun parseSelectExpression(builder: PsiBuilder) {
+        val selectMarker = builder.mark()
+
         parseSelectSelector(builder)
         if (isMessageBoundary(builder)) {
+            selectMarker.drop()
             return
         }
 
@@ -279,7 +282,15 @@ class FluentParser : PsiParser, LightPsiParser {
                 break
             }
 
-            if (startsDefaultVariant(builder)) {
+            val isDefault = startsDefaultVariant(builder)
+            if (!isDefault && builder.tokenType != FluentTypes.BRACKET_L) {
+                // Not a variant start; avoid infinite loop on unexpected tokens.
+                builder.advanceLexer()
+                continue
+            }
+
+            val variantMarker = builder.mark()
+            if (isDefault) {
                 builder.advanceLexer()
                 consumeInlineBlanks(builder)
             }
@@ -302,6 +313,12 @@ class FluentParser : PsiParser, LightPsiParser {
                 !builder.eof() &&
                 !isMessageBoundary(builder)
             ) {
+                // Keep line-break / indent before the next variant arm outside the variant node (#5).
+                if ((builder.tokenType == FluentTypes.LINE_END || builder.tokenType == FluentTypes.INDENT) &&
+                    onlySpaceBeforeNextVariant(builder)
+                ) {
+                    break
+                }
                 when (builder.tokenType) {
                     FluentTypes.BRACE_L -> parseInlinePlaceable(builder)
                     FluentTypes.LINE_END,
@@ -315,8 +332,26 @@ class FluentParser : PsiParser, LightPsiParser {
                     }
                 }
             }
+
+            variantMarker.done(if (isDefault) FluentTypes.DEFAULT_VARIANT else FluentTypes.VARIANT)
         }
 
+        selectMarker.done(FluentTypes.SELECT_EXPRESSION)
+    }
+
+    /** True when the remaining tokens are only space/comments until the next variant arm or `}`. */
+    private fun onlySpaceBeforeNextVariant(builder: PsiBuilder): Boolean {
+        var offset = 0
+        while (true) {
+            val tokenType = builder.lookAhead(offset) ?: return false
+            if (isSpaceToken(tokenType) || tokenType == FluentTypes.COMMENT_LINE) {
+                offset++
+                continue
+            }
+            return tokenType == FluentTypes.BRACKET_L ||
+                tokenType == FluentTypes.BRACE_R ||
+                startsDefaultVariant(builder, offset)
+        }
     }
 
     private fun parseSelectSelector(builder: PsiBuilder) {
@@ -545,8 +580,7 @@ class FluentParser : PsiParser, LightPsiParser {
                     while (isSpaceToken(builder.lookAhead(lookAheadOffset)) || builder.lookAhead(lookAheadOffset) == FluentTypes.COMMENT_LINE) {
                         lookAheadOffset++
                     }
-                    builder.lookAhead(lookAheadOffset) == FluentTypes.HYPHEN &&
-                        builder.lookAhead(lookAheadOffset + 1) == FluentTypes.ANGLE_R
+                    isArrowOperatorAt(builder, lookAheadOffset)
                 }
             }
             FluentTypes.SYMBOL -> {
@@ -570,12 +604,23 @@ class FluentParser : PsiParser, LightPsiParser {
                 while (isSpaceToken(builder.lookAhead(lookAheadOffset)) || builder.lookAhead(lookAheadOffset) == FluentTypes.COMMENT_LINE) {
                     lookAheadOffset++
                 }
-                builder.lookAhead(lookAheadOffset) == FluentTypes.HYPHEN &&
-                    builder.lookAhead(lookAheadOffset + 1) == FluentTypes.ANGLE_R
+                isArrowOperatorAt(builder, lookAheadOffset)
             }
             FluentTypes.IF_KEYWORD -> true
             else -> false
         }
+    }
+
+    /** True when lookAhead(offset) starts `-` optionally followed by spaces then `>`. */
+    private fun isArrowOperatorAt(builder: PsiBuilder, offset: Int): Boolean {
+        if (builder.lookAhead(offset) != FluentTypes.HYPHEN) {
+            return false
+        }
+        var lookAheadOffset = offset + 1
+        while (isSpaceToken(builder.lookAhead(lookAheadOffset)) || builder.lookAhead(lookAheadOffset) == FluentTypes.COMMENT_LINE) {
+            lookAheadOffset++
+        }
+        return builder.lookAhead(lookAheadOffset) == FluentTypes.ANGLE_R
     }
 
     private fun isMessageStart(builder: PsiBuilder): Boolean = isMessageStart(builder, 0)

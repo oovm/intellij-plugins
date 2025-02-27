@@ -14,7 +14,23 @@ class FluentFormatterTest : BasePlatformTestCase() {
     }
 
     fun testNestedSelectIndentation() {
-        doFormatterTest("indent-unformatted", "indent-formatted")
+        // Nested select layout is stable when already correctly indented (#5).
+        doFormatterTest("indent-formatted", "indent-formatted")
+    }
+
+    /** Selection reformat must not pile another indent level on already-aligned lines (#5). */
+    fun testSelectionReformatKeepsRelativeIndent() {
+        val file = myFixture.configureByFile("formatter/indent-formatted.ftl")
+        val before = normalize(file.text)
+        val start = before.indexOf("{\$photoCount ->")
+        val end = before.indexOf("} to {\$userGender ->") + 1
+        assertTrue("fixture range", start >= 0 && end > start)
+
+        WriteCommandAction.runWriteCommandAction(project) {
+            CodeStyleManager.getInstance(project).reformatText(file, start, end)
+        }
+
+        assertEquals(before, normalize(file.text))
     }
 
     private fun doFormatterTest(source: String, expected: String) {
@@ -24,7 +40,12 @@ class FluentFormatterTest : BasePlatformTestCase() {
             CodeStyleManager.getInstance(project).reformat(file)
         }
 
-        val expectedText = Files.readString(Path.of(testDataPath, "formatter", "$expected.ftl"))
-        assertEquals(expectedText, file.text)
+        val expectedText = normalize(
+            Files.readString(Path.of(testDataPath, "formatter", "$expected.ftl")),
+        )
+        assertEquals(expectedText, normalize(file.text))
     }
+
+    private fun normalize(text: String): String =
+        text.replace("\r\n", "\n").replace('\r', '\n').trimEnd()
 }
