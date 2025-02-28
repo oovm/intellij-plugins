@@ -5,6 +5,8 @@
 	<!-- Product and plugin compatibility requirements -->
 	<!-- https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html -->
 	<depends>com.intellij.modules.platform</depends>
+	<depends>com.intellij.modules.xml</depends>
+	<depends optional="true" config-file="plugin-with-markdown.xml">org.intellij.plugins.markdown</depends>
 	<resource-bundle>messages.FluentBundle</resource-bundle>
 	<extensions defaultExtensionNs="com.intellij">
 		<fileType
@@ -81,8 +83,7 @@
 		<langCodeStyleSettingsProvider
 			implementation="com.github.projectfluent.ide.codeStyle.FluentLanguageCodeStyleSettingsProvider"
 		/>
-		<!-- Markdown fence injection stays off until SimpleInjection is wired for MarkdownCodeFence. -->
-		<!-- InjectVue must stay on multiHostInjector (implements MultiHostInjector, not LanguageInjectionContributor). -->
+		<!-- InjectVue: XML-level injection for <fluent> blocks (Vue SFC / Community-safe, no Vue plugin API). -->
 		<multiHostInjector implementation="com.github.projectfluent.ide.highlight.InjectVue"/>
 
 		<psi.referenceContributor implementation="com.github.projectfluent.ide.reference.FluentReferenceContributor"/>
