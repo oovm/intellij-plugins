@@ -7,6 +7,7 @@ import com.intellij.formatting.FormattingModelBuilder
 import com.intellij.formatting.FormattingModelProvider
 import com.intellij.formatting.Indent
 import com.intellij.lang.ASTNode
+import com.intellij.lang.injection.InjectedLanguageManager
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiFile
 
@@ -28,7 +29,15 @@ class FluentFormatBuilder : FormattingModelBuilder {
         val settings = formattingContext.codeStyleSettings
         val element = formattingContext.psiElement
         val ctx = FluentFormatSpace.create(settings)
-        val block = FluentFormatBlock(element.node, null, Indent.getNoneIndent(), null, ctx)
-        return FormattingModelProvider.createFormattingModelForPsiFile(element.containingFile, block, settings)
+        val file = element.containingFile
+        val injected = InjectedLanguageManager.getInstance(element.project).isInjectedFragment(file)
+        // Injected Fluent already sits inside host indentation (#11).
+        val rootIndent = if (injected) {
+            Indent.getAbsoluteNoneIndent()
+        } else {
+            Indent.getNoneIndent()
+        }
+        val block = FluentFormatBlock(element.node, null, rootIndent, null, ctx)
+        return FormattingModelProvider.createFormattingModelForPsiFile(file, block, settings)
     }
 }
