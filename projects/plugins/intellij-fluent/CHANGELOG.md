@@ -4,6 +4,14 @@
 
 ## [Unreleased]
 
+## [0.4.7]
+### Added
+- Structure view support ([#7](https://github.com/oovm/intellij-plugins/issues/7))
+- Vue SFC `<fluent>` block injection and optional Markdown `ftl`/`fluent` fence highlighting ([#10](https://github.com/oovm/intellij-plugins/issues/10))
+### Fixed
+- Wrong format indent level of selection ([#5](https://github.com/oovm/intellij-plugins/issues/5))
+- Extra indentation in Vue SFC injected Fluent fragments ([#11](https://github.com/oovm/intellij-plugins/issues/11))
+
 ## [0.4.6]
 ### Added
 - Replace the `Flex` parser with a handwritten parser

@@ -10,8 +10,8 @@ plugins {
     alias(libs.plugins.qodana)
 }
 
-group = providers.gradleProperty("pluginGroup").get()
-version = providers.gradleProperty("pluginVersion").get()
+group = project.property("pluginGroup") as String
+version = project.property("pluginVersion") as String
 
 kotlin {
     jvmToolchain(21)
@@ -48,13 +48,15 @@ dependencies {
 }
 
 intellijPlatform {
+    val pluginVersionProvider = providers.provider { version.toString() }
+
     pluginConfiguration {
-        version = providers.gradleProperty("pluginVersion")
+        version = pluginVersionProvider
 
         description = providers.fileContents(layout.projectDirectory.file("README.md")).asText.map(::markdownToHTML)
 
         val changelog = project.changelog
-        changeNotes = providers.gradleProperty("pluginVersion").map { pluginVersion ->
+        changeNotes = pluginVersionProvider.map { pluginVersion ->
             with(changelog) {
                 renderItem(
                     (getOrNull(pluginVersion) ?: getUnreleased())
@@ -78,7 +80,7 @@ intellijPlatform {
 
     publishing {
         token = providers.environmentVariable("PUBLISH_TOKEN")
-        channels = providers.gradleProperty("pluginVersion").map {
+        channels = pluginVersionProvider.map {
             listOf(it.substringAfter('-', "").substringBefore('.').ifEmpty { "default" })
         }
     }
@@ -114,7 +116,7 @@ tasks {
     register("ciVerify") {
         group = "verification"
         description = "CI gate: compile, compile tests, and package the Fluent plugin."
-        dependsOn("compileKotlin", "compileTestKotlin", "buildPlugin")
+        dependsOn("compileKotlin", "compileTestKotlin", "test", "buildPlugin")
     }
 }
 
