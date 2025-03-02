@@ -3,7 +3,7 @@ package vos.test
 import com.intellij.psi.TokenType
 import com.intellij.psi.tree.IElementType
 import com.intellij.testFramework.LightPlatformTestCase
-import com.intellij.testFramework.TestTimeout
+import vos.test.TestTimeout
 import vos.surface.lexer.VosLexer
 import vos.surface.psi.VosTypes
 

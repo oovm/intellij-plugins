@@ -1,15 +1,10 @@
-package com.intellij.testFramework
+package vos.test
 
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 
-/**
- * Bounded execution for fixture-driven tests (lexer / parser can hang on bad input).
- *
- * Runs [block] on the **calling** thread (required for IntelliJ EDT fixture tests) and
- * interrupts that thread when [timeoutMs] elapses.
- */
+/** Bounded execution for lexer/parser smoke tests. */
 object TestTimeout {
     const val DEFAULT_TIMEOUT_MS: Long = 10_000
 
@@ -18,7 +13,7 @@ object TestTimeout {
         val caller = Thread.currentThread()
         val timedOut = AtomicBoolean(false)
         val watchdog = Executors.newSingleThreadScheduledExecutor { runnable ->
-            Thread(runnable, "fixture-test-timeout-watchdog").apply { isDaemon = true }
+            Thread(runnable, "vos-test-timeout-watchdog").apply { isDaemon = true }
         }
         val future = watchdog.schedule({
             timedOut.set(true)
@@ -29,14 +24,12 @@ object TestTimeout {
                 block()
             } catch (interrupted: InterruptedException) {
                 throw AssertionError(
-                    "Fixture test exceeded ${timeoutMs}ms (possible hang in lexer/parser)",
+                    "Test exceeded ${timeoutMs}ms (possible hang in lexer/parser)",
                     interrupted,
                 )
             }
             if (timedOut.get()) {
-                throw AssertionError(
-                    "Fixture test exceeded ${timeoutMs}ms (possible hang in lexer/parser)",
-                )
+                throw AssertionError("Test exceeded ${timeoutMs}ms (possible hang in lexer/parser)")
             }
             result
         } finally {
