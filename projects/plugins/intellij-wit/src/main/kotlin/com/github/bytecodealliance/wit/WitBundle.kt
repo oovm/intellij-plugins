@@ -1,18 +1,20 @@
 package com.github.bytecodealliance.wit
 
-import com.github.bytecodealliance.wit.WitLanguage.Bundle
-import com.intellij.DynamicBundle
+import com.intellij.AbstractBundle
+import org.jetbrains.annotations.Nls
 import org.jetbrains.annotations.PropertyKey
 import java.util.function.Supplier
 
-object WitBundle : DynamicBundle(Bundle) {
+private const val BUNDLE = "messages.WitBundle"
+
+object WitBundle : AbstractBundle(BUNDLE) {
     @Suppress("SpreadOperator")
     @JvmStatic
-    fun message(@PropertyKey(resourceBundle = Bundle) key: String, vararg params: Any): String =
+    fun message(@PropertyKey(resourceBundle = BUNDLE) key: String, vararg params: Any): @Nls String =
         getMessage(key, *params)
 
     @Suppress("SpreadOperator", "unused")
     @JvmStatic
-    fun messagePointer(@PropertyKey(resourceBundle = Bundle) key: String, vararg params: Any): Supplier<String> =
+    fun messagePointer(@PropertyKey(resourceBundle = BUNDLE) key: String, vararg params: Any): Supplier<@Nls String> =
         getLazyMessage(key, *params)
 }
