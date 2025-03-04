@@ -25,8 +25,6 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":packages"))
-
     testImplementation(libs.junit)
 
     intellijPlatform {

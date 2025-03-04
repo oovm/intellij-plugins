@@ -11,6 +11,9 @@
 ### Fixed
 - Wrong format indent level of selection ([#5](https://github.com/oovm/intellij-plugins/issues/5))
 - Extra indentation in Vue SFC injected Fluent fragments ([#11](https://github.com/oovm/intellij-plugins/issues/11))
+- Stop bundling `:packages` test helpers in the plugin distribution
+- Replace internal `OptionsBundle` color labels with `FluentBundle` keys
+- Use `AbstractBundle` instead of deprecated `DynamicBundle(String)`
 
 ## [0.4.6]
 ### Added
