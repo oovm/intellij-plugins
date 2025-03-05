@@ -11,3 +11,4 @@
 - Stop bundling `:packages` test helpers in the plugin distribution
 - Replace internal `OptionsBundle` color labels with `WitBundle` keys
 - Use `AbstractBundle` instead of deprecated `DynamicBundle(String)`
+- Avoid calling internal `IElementType.getDebugName()` in token `toString()`
