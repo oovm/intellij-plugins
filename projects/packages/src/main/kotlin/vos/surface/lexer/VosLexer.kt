@@ -2,7 +2,6 @@ package vos.surface.lexer
 
 import com.intellij.lexer.Lexer
 import com.intellij.lexer.LexerPosition
-import com.intellij.lexer.LexerPositionImpl
 import com.intellij.psi.TokenType.BAD_CHARACTER
 import com.intellij.psi.TokenType.WHITE_SPACE
 import com.intellij.psi.tree.IElementType
@@ -45,7 +44,10 @@ class VosLexer : Lexer() {
     }
 
     override fun getCurrentPosition(): LexerPosition =
-        LexerPositionImpl(tokenStart, state)
+        object : LexerPosition {
+            override fun getOffset(): Int = currentOffset
+            override fun getState(): Int = state
+        }
 
     override fun restore(position: LexerPosition) {
         start(buffer, position.offset, endOffset, position.state)

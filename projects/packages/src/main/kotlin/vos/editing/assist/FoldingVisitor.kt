@@ -4,8 +4,6 @@ import com.intellij.lang.folding.FoldingDescriptor
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiRecursiveElementVisitor
-import com.intellij.refactoring.suggested.endOffset
-import com.intellij.refactoring.suggested.startOffset
 import vos.surface.psi.VosArrayNode
 import vos.surface.psi.VosBraceBlockNode
 import vos.surface.psi.VosBracketBlockNode
@@ -23,12 +21,12 @@ class FoldingVisitor(
             is VosClassBlockNode -> {
                 val field = element.classFieldList.count()
                 val placeholder = if (field > 1) "$field fields" else "$field field"
-                fold(element, element.firstChild.endOffset, element.lastChild.startOffset, placeholder)
+                fold(element, element.firstChild.textRange.endOffset, element.lastChild.textRange.startOffset, placeholder)
             }
             is VosUnionBlockNode -> {
                 val variant = element.unionInnerList.count { it.unionField != null }
                 val placeholder = if (variant > 1) "$variant variants" else "$variant variant"
-                fold(element, element.firstChild.endOffset, element.lastChild.startOffset, placeholder)
+                fold(element, element.firstChild.textRange.endOffset, element.lastChild.textRange.startOffset, placeholder)
             }
         }
         super.visitElement(element)

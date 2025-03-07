@@ -10,6 +10,7 @@
 ### Fixed
 - Bundle `:packages` under plugin `lib/` so `vos.*` classes load at runtime (fixes ClassNotFoundException on Marketplace)
 - Drop unused protobuf workspace protocol stubs to shrink the plugin zip
+- Stop using internal `LexerPositionImpl` and `UtilsKt` offset helpers in vos lexing/folding
 - Keep test helpers out of the packaged `:packages` library
 - Replace internal `OptionsBundle` color labels with `VosBundle` keys
 - Use `AbstractBundle` instead of deprecated `DynamicBundle(String)`
