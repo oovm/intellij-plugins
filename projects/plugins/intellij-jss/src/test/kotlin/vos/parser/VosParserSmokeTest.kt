@@ -33,6 +33,28 @@ class VosParserSmokeTest : ParsingTestCase("parser", "vos", VosParserDefinition(
 
     fun testNamespaceHasNoErrors() = assertNoErrors("namespace a.b.c")
 
+    fun testSchemaObjectTypeHasNoErrors() = assertNoErrors(
+        """
+        schema Product: object {
+            required: ["productId"]
+        }
+        """.trimIndent(),
+    )
+
+    fun testPropertyDeclarationHasNoErrors() = assertNoErrors(
+        """
+        properties productId: integer;
+        """.trimIndent(),
+    )
+
+    fun testArrayPropertyBlockHasNoErrors() = assertNoErrors(
+        """
+        properties tags: array {
+            minItems: 1
+        }
+        """.trimIndent(),
+    )
+
     private fun assertNoErrors(text: String) = TestTimeout.run {
         val psiFile = createPsiFile("case.vos", text)
         val errors = PsiTreeUtil.findChildrenOfType(psiFile, PsiErrorElement::class.java).toList()

@@ -30,20 +30,35 @@ class VosParser : PsiParser {
             consume(builder, VosTypes.COMMA)
 
     private fun parseSchemaStatement(builder: PsiBuilder): Boolean {
-        if (builder.tokenType != VosTypes.SYMBOL || builder.tokenText != "schema") {
+        if (builder.tokenType != VosTypes.SYMBOL) {
+            return false
+        }
+        val keyword = builder.tokenText ?: return false
+        if (keyword !in SCHEMA_DECLARATION_KEYWORDS) {
             return false
         }
         val marker = builder.mark()
-        val schemaKw = builder.mark()
-        builder.advanceLexer()
-        schemaKw.done(VosTypes.SCHEMA)
+        if (keyword == "schema") {
+            val schemaKw = builder.mark()
+            builder.advanceLexer()
+            schemaKw.done(VosTypes.SCHEMA)
+        } else {
+            builder.advanceLexer()
+        }
         if (!parseIdentifier(builder)) {
             marker.error("Expected identifier")
+            marker.done(VosTypes.SCHEMA_STATEMENT)
             return true
         }
-        parseTypeExpression(builder)
-        if (!parseBraceBlock(builder, VosTypes.BRACE_BLOCK) { parseKvPair(it) || parseIgnore(it) }) {
-            marker.error("Expected schema block")
+        if (consume(builder, VosTypes.COLON)) {
+            parseTypeExpression(builder)
+        }
+        if (builder.tokenType == VosTypes.BRACE_L) {
+            if (!parseBraceBlock(builder, VosTypes.BRACE_BLOCK) { parseKvPair(it) || parseIgnore(it) }) {
+                marker.error("Expected schema block")
+            }
+        } else {
+            consume(builder, VosTypes.SEMICOLON)
         }
         marker.done(VosTypes.SCHEMA_STATEMENT)
         return true
@@ -477,7 +492,15 @@ class VosParser : PsiParser {
 
     private fun parseTypeSymbol(builder: PsiBuilder): Boolean {
         val marker = builder.mark()
-        if (!(consume(builder, VosTypes.SYMBOL) || consume(builder, VosTypes.STRING))) {
+        val ok = when (builder.tokenType) {
+            VosTypes.SYMBOL, VosTypes.STRING -> {
+                builder.advanceLexer()
+                true
+            }
+            VosTypes.KW_LET -> builder.tokenText == "object" && consume(builder, VosTypes.KW_LET)
+            else -> false
+        }
+        if (!ok) {
             marker.drop()
             return false
         }
@@ -592,5 +615,9 @@ class VosParser : PsiParser {
         if (builder.tokenType != type) return false
         builder.advanceLexer()
         return true
+    }
+
+    private companion object {
+        val SCHEMA_DECLARATION_KEYWORDS = setOf("schema", "property", "properties")
     }
 }
