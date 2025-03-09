@@ -12,6 +12,7 @@
 - Drop unused protobuf workspace protocol stubs to shrink the plugin zip
 - Stop using internal `LexerPositionImpl` and `UtilsKt` offset helpers in vos lexing/folding
 - Parse `object` type symbols and `property`/`properties` declarations without breaking the file ([#139](https://github.com/oovm/intellij-plugins/issues/139))
+- Offer schema property completions based on enclosing object or array type ([#138](https://github.com/oovm/intellij-plugins/issues/138))
 - Keep test helpers out of the packaged `:packages` library
 - Replace internal `OptionsBundle` color labels with `VosBundle` keys
 - Use `AbstractBundle` instead of deprecated `DynamicBundle(String)`

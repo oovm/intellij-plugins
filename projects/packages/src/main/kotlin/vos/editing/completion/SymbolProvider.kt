@@ -11,53 +11,58 @@ import vos.surface.file.VosIcons
 
 class SymbolProvider : CompletionProvider<CompletionParameters>() {
     override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, resultSet: CompletionResultSet) {
-        print(parameters)
-        print(context)
-
-        addProperty(resultSet)
+        val kind = SchemaCompletionContext.collectionKind(parameters.position)
+        val existing = SchemaCompletionContext.existingPropertyKeys(parameters.position)
+        addProperty(resultSet, kind, existing)
     }
 
-    // FIXME: Remove fields that have already appeared
-    private fun addProperty(set: CompletionResultSet) {
+    private fun addProperty(set: CompletionResultSet, kind: SchemaCollectionKind, existing: Set<String>) {
         set.addKeyword("property", "keyword")
         set.addKeyword("schema", "keyword")
-        set.addProperty("type", "string | array")
-        set.addProperty("allOf", "array")
-        set.addProperty("anyOf", "array")
-        set.addProperty("oneOf", "array")
-        addArrayProperty(set)
-        PropertyData.objectCompletion(set, setOf())
-        addStringProperty(set)
-        addNumberProperty(set)
+        when (kind) {
+            SchemaCollectionKind.OBJECT -> {
+                set.addProperty("type", "string")
+                PropertyData.objectCompletion(set, existing)
+            }
+            SchemaCollectionKind.ARRAY -> {
+                set.addProperty("type", "string")
+                PropertyData.arrayCompletion(set, existing)
+                addArrayProperty(set, existing)
+            }
+            SchemaCollectionKind.UNKNOWN -> {
+                set.addProperty("type", "string | array")
+                set.addProperty("allOf", "array")
+                set.addProperty("anyOf", "array")
+                set.addProperty("oneOf", "array")
+                addStringProperty(set, existing)
+                addNumberProperty(set, existing)
+            }
+        }
     }
 
-    private fun addArrayProperty(set: CompletionResultSet) {
-        set.addProperty("minItems", "number")
-        set.addProperty("maxItems", "number")
-        set.addProperty("minimum", "number")
-        set.addProperty("exclusiveMinimum", "boolean")
-        set.addProperty("maximum", "number")
-        set.addProperty("exclusiveMaximum", "boolean")
-        set.addProperty("items", "object")
-        set.addProperty("uniqueItems", "boolean")
+    private fun addArrayProperty(set: CompletionResultSet, existing: Set<String>) {
+        set.addProperty("minItems", "number", existing)
+        set.addProperty("maxItems", "number", existing)
+        set.addProperty("uniqueItems", "boolean", existing)
     }
 
-    private fun addStringProperty(set: CompletionResultSet) {
-        set.addProperty("minLength", "number")
-        set.addProperty("maxLength", "number")
-        set.addProperty("pattern", "regex")
+    private fun addStringProperty(set: CompletionResultSet, existing: Set<String>) {
+        set.addProperty("minLength", "number", existing)
+        set.addProperty("maxLength", "number", existing)
+        set.addProperty("pattern", "regex", existing)
     }
 
-    private fun addNumberProperty(set: CompletionResultSet) {
-        set.addProperty("minimum", "number")
-        set.addProperty("exclusiveMinimum", "boolean")
-        set.addProperty("maximum", "number")
-        set.addProperty("exclusiveMaximum", "boolean")
-        set.addProperty("multipleOf", "boolean")
+    private fun addNumberProperty(set: CompletionResultSet, existing: Set<String>) {
+        set.addProperty("minimum", "number", existing)
+        set.addProperty("exclusiveMinimum", "boolean", existing)
+        set.addProperty("maximum", "number", existing)
+        set.addProperty("exclusiveMaximum", "boolean", existing)
+        set.addProperty("multipleOf", "boolean", existing)
     }
 }
 
-private fun CompletionResultSet.addProperty(field: String, typing: String) {
+private fun CompletionResultSet.addProperty(field: String, typing: String, existing: Set<String> = emptySet()) {
+    if (field in existing) return
     val e = when (typing) {
         "array" -> LookupElementBuilder.create("$field: []").withInsertHandler { ctx, _ ->
             EditorModificationUtil.moveCaretRelatively(ctx.editor, -1)
