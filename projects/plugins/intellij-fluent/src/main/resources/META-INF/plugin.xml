@@ -91,7 +91,7 @@
 
 	</extensions>
 	<actions>
-		<action id="NewFluentFile" class="com.github.projectfluent.ide.actions.FluentCreateFile" text="Create Fluent" description="Create fluent file" icon="com.github.projectfluent.language.file.FluentIcons.FILE">
+		<action id="NewFluentFile" class="com.github.projectfluent.ide.actions.FluentCreateFile" text="Create Fluent" description="Create fluent file" icon="/icons/ftl.svg">
 			<add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewHtmlFile"/>
 		</action>
 <!--		<action id="jss.JssConvertJson" class="com.github.projectfluent.ide.actions.FluentConvertMo"/>-->

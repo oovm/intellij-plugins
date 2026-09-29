@@ -8,7 +8,6 @@ import javax.swing.Icon
 class FluentIcons : IconProvider() {
     override fun getIcon(psiElement: PsiElement, flags: Int): Icon? {
         val fileName = psiElement.containingFile.name
-
         return when {
             fileName.endsWith(".ftl") -> FILE
             else -> null
@@ -16,6 +15,10 @@ class FluentIcons : IconProvider() {
     }
 
     companion object {
-        var FILE: Icon? = IconLoader.getIcon("/icons/ftl.svg", FluentIcons::class.java)
+        /** Resource path used by `plugin.xml` action icons and [IconLoader]. */
+        const val FILE_PATH = "/icons/ftl.svg"
+
+        @JvmField
+        val FILE: Icon = IconLoader.getIcon(FILE_PATH, FluentIcons::class.java)
     }
 }
