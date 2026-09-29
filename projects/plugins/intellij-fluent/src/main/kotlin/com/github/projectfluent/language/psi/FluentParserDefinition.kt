@@ -18,9 +18,11 @@ import com.intellij.psi.tree.TokenSet
 
 
 object FluentParserDefinition : ParserDefinition {
+    private val fileNodeType = IFileElementType(FluentLanguage)
+
     override fun createLexer(project: Project): Lexer = FluentLexer()
     override fun createParser(project: Project): PsiParser = FluentParser()
-    override fun getFileNodeType(): IFileElementType = IFileElementType(FluentLanguage)
+    override fun getFileNodeType(): IFileElementType = fileNodeType
     override fun getCommentTokens(): TokenSet = TokenSet.create(FluentTypes.COMMENT_LINE)
     override fun getStringLiteralElements(): TokenSet = TokenSet.create(
         FluentTypes.STRING_QUOTE,
