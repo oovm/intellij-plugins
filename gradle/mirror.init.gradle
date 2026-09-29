@@ -1,0 +1,31 @@
+import org.gradle.api.artifacts.repositories.MavenArtifactRepository
+
+def mirrorRules = [
+    'repo.maven.apache.org/maven2' : 'https://maven.aliyun.com/repository/public',
+    'repo1.maven.org/maven2'     : 'https://maven.aliyun.com/repository/public',
+]
+
+def applyMirror = { MavenArtifactRepository repo ->
+    def current = repo.url.toString().replaceAll(/\/+$/, '')
+    mirrorRules.each { origin, mirror ->
+        if (current.contains(origin)) {
+            repo.setUrl(mirror)
+        }
+    }
+}
+
+def applyMirrors = { repoHandler ->
+    repoHandler.withType(MavenArtifactRepository).configureEach(applyMirror)
+}
+
+gradle.settingsEvaluated { settings ->
+    applyMirrors(settings.pluginManagement.repositories)
+    applyMirrors(settings.dependencyResolutionManagement.repositories)
+}
+
+gradle.projectsLoaded {
+    gradle.allprojects { project ->
+        applyMirrors(project.buildscript.repositories)
+        applyMirrors(project.repositories)
+    }
+}
