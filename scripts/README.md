@@ -1,25 +1,27 @@
 # scripts
 
-| 目录 | 用途 |
-|------|------|
-| `dev/` | 本地验证，命令与 CI 对齐（可选） |
+| Directory | Purpose |
+|-----------|---------|
+| `dev/` | Local verification aligned with CI (optional) |
 
-## 仓库布局
+## Repository layout
 
-- `projects/plugins/intellij-fluent` — Fluent Marketplace 插件
-- `projects/packages` — 唯一共享库（代码 only，无 `resources`，工程名 `:packages`）
-- `projects/designs` — 品牌/设计素材（与 packages、plugins 平级）
+- `projects/plugins/intellij-fluent` — Fluent Marketplace plugin
+- `projects/plugins/intellij-jss` — JSS Marketplace plugin (`.jss`)
+- `projects/plugins/intellij-wit` — WIT IDL Marketplace plugin
+- `projects/packages` — Shared library only (code, no `resources`; Gradle project `:packages`)
+- `projects/designs` — Brand assets and ecosystem manifests (`ecosystems/`, `jss/`, …)
 
-## 本地 CI
+## Local CI
 
 ```bash
 ./gradlew ciVerify
 ```
 
-## Run vs Build
+## Run vs build
 
-| 任务 | 行为 |
-|------|------|
-| `./gradlew runIde` | 一次拉起 IDE，加载全部 `:plugins/*`（共用 sandbox） |
-| `./gradlew buildPlugins` | 分别打出每个插件自己的 zip，互不合并 |
-| `:plugins:intellij-*:publishPlugin` | 各自上传与审核 |
+| Task | Behavior |
+|------|----------|
+| `./gradlew runIde` | Start one IDE sandbox with every `:plugins/*` module loaded |
+| `./gradlew buildPlugins` | Build a separate zip per plugin (not merged) |
+| `:plugins:intellij-*:publishPlugin` | Publish and verify each plugin independently |

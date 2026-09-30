@@ -7,76 +7,76 @@
 	<depends>com.intellij.modules.platform</depends>
 	<depends>com.intellij.modules.json</depends>
 	<!--    <depends optional="true" config-file="plugin-with-rust.xml">org.rust.lang</depends>-->
-	<resource-bundle>messages.VosBundle</resource-bundle>
+	<resource-bundle>messages.JssBundle</resource-bundle>
 	<extensions defaultExtensionNs="com.intellij">
 		<fileType
-			name="VOS"
-			language="VOS"
-			extensions="vos"
-			implementationClass="vos.surface.file.VosFileType"
+			name="JSS"
+			language="JSS"
+			extensions="jss"
+			implementationClass="jss.surface.file.JssFileType"
 			fieldName="INSTANCE"/>
 		<lang.parserDefinition
-			language="VOS"
-			implementationClass="vos.surface.file.VosParserDefinition"/>
-		<projectViewNestingRulesProvider implementation="vos.surface.file.FileGroup"/>
+			language="JSS"
+			implementationClass="jss.surface.file.JssParserDefinition"/>
+		<projectViewNestingRulesProvider implementation="jss.surface.file.FileGroup"/>
 		<!-- Highlight -->
 		<additionalTextAttributes scheme="Default" file="colors/JssDefault.xml"/>
 		<additionalTextAttributes scheme="Darcula" file="colors/JssDarcula.xml"/>
-		<annotator language="VOS" implementationClass="vos.semantics.inspect.EscapeAnnotator"/>
-		<colorSettingsPage implementation="vos.editing.highlight.ColorSettings"/>
-		<highlightVisitor implementation="vos.editing.highlight.HighlightAST"/>
+		<annotator language="JSS" implementationClass="jss.semantics.inspect.EscapeAnnotator"/>
+		<colorSettingsPage implementation="jss.editing.highlight.ColorSettings"/>
+		<highlightVisitor implementation="jss.editing.highlight.HighlightAST"/>
 		<lang.syntaxHighlighter
-			language="VOS"
-			implementationClass="vos.editing.highlight.HighlightToken"/>
+			language="JSS"
+			implementationClass="jss.editing.highlight.HighlightToken"/>
 		<!-- View -->
 		<lang.psiStructureViewFactory
-			language="VOS"
-			implementationClass="vos.editing.structure.ViewFactory"/>
+			language="JSS"
+			implementationClass="jss.editing.structure.ViewFactory"/>
 		<!-- Formatter -->
 		<lang.formatter
-			language="VOS"
-			implementationClass="vos.editing.format.FormatBuilder"/>
+			language="JSS"
+			implementationClass="jss.editing.format.FormatBuilder"/>
 		<lang.commenter
-			language="VOS"
-			implementationClass="vos.editing.format.Commenter"/>
+			language="JSS"
+			implementationClass="jss.editing.format.Commenter"/>
 		<lang.smartEnterProcessor
-			language="VOS"
-			implementationClass="vos.editing.format.SmartEnter"/>
+			language="JSS"
+			implementationClass="jss.editing.format.SmartEnter"/>
 		<!-- Document -->
-		<!--documentationProvider implementation="vos.editing.documentation.JssDocumentationExtender"-->
-		<!--		<psi.referenceContributor implementation="vos.editing.documentation.JssUrlReferenceContributor"/>-->
+		<!--documentationProvider implementation="jss.editing.documentation.JssDocumentationExtender"-->
+		<!--		<psi.referenceContributor implementation="jss.editing.documentation.JssUrlReferenceContributor"/>-->
 		<lang.documentationProvider
-			language="VOS"
-			implementationClass="vos.editing.documentation.DocumentationProvider"/>
+			language="JSS"
+			implementationClass="jss.editing.documentation.DocumentationProvider"/>
 		<lang.braceMatcher
-			language="VOS"
-			implementationClass="vos.editing.assist.JssBraceMatcher"/>
+			language="JSS"
+			implementationClass="jss.editing.assist.JssBraceMatcher"/>
 		<lang.quoteHandler
-			language="VOS"
-			implementationClass="vos.editing.assist.JssQuoteHandler"/>
+			language="JSS"
+			implementationClass="jss.editing.assist.JssQuoteHandler"/>
 		<lang.foldingBuilder
-			language="VOS"
-			implementationClass="vos.editing.assist.JssFoldingBuilder"/>
+			language="JSS"
+			implementationClass="jss.editing.assist.JssFoldingBuilder"/>
 		<indexPatternBuilder
-			implementation="vos.editing.todo.TodoIndexPatternBuilder"/>
+			implementation="jss.editing.todo.TodoIndexPatternBuilder"/>
 		<todoIndexer
 			filetype="JSS"
-			implementationClass="vos.editing.todo.TodoIndexer"/>
+			implementationClass="jss.editing.todo.TodoIndexer"/>
 		<completion.contributor
-			language="VOS"
-			implementationClass="vos.editing.completion.CompletionContributor"/>
+			language="JSS"
+			implementationClass="jss.editing.completion.CompletionContributor"/>
 
 
 		<langCodeStyleSettingsProvider
-			implementation="vos.editing.format.codestyle.CodeStyleSettingProvider"/>
+			implementation="jss.editing.format.codestyle.CodeStyleSettingProvider"/>
 
 	</extensions>
 	<actions>
-		<action id="NewJssFile" class="vos.editing.actions.CreateFile">
+		<action id="NewJssFile" class="jss.editing.actions.CreateFile">
 			<add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewHtmlFile"/>
 		</action>
 		<action id="jss.JssConvertJson"
-				class="vos.editing.actions.JssConvertJson"/>
+				class="jss.editing.actions.JssConvertJson"/>
 		<group id="jss.JssGenerator" popup="true" text="JssGenerator">
 			<reference ref="NewJssFile"/>
 			<reference ref="jss.JssConvertJson"/>

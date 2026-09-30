@@ -1,8 +1,8 @@
 # intellij-jss
 
-IntelliJ plugin for [JSS / VOS](https://github.com/voml) (`.vos` / `.jss` schema files).
+IntelliJ plugin for [JSS](https://github.com/voml) (`.jss` schema files).
 
-Language implementation lives in `:packages` under the `vos.*` package; this module is the Marketplace plugin shell.
+Language implementation lives in `:packages` under the `jss.*` package; this module is the Marketplace plugin shell.
 
 ## Features
 

@@ -1,0 +1,6 @@
+id: jss
+plugin: intellij-jss
+repo: intellij-plugins
+languages:
+  - jss
+marketplace_id: com.github.voml.jss_intellij

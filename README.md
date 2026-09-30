@@ -8,7 +8,7 @@ Multi-plugin workspace for JetBrains Marketplace plugins and one shared library.
 | [`projects/plugins/intellij-jss`](projects/plugins/intellij-jss) | JSS language plugin (`.jss`) |
 | [`projects/plugins/intellij-wit`](projects/plugins/intellij-wit) | WIT IDL plugin (`.wit` / `.witx`) |
 | [`projects/packages`](projects/packages) | Shared code-only library (`:packages`) |
-| [`projects/designs`](projects/designs) | Brand assets |
+| [`projects/designs`](projects/designs) | Brand assets and ecosystem manifests (`ecosystems/`, `jss/`, …) |
 
 ```bash
 ./gradlew runIde          # load every :plugins/* together
