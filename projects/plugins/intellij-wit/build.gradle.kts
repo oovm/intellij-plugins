@@ -121,8 +121,8 @@ tasks {
 
     register("ciVerify") {
         group = "verification"
-        description = "CI gate: compile, compile tests, and package the WIT plugin."
-        dependsOn("compileKotlin", "compileTestKotlin", "test", "buildPlugin")
+        description = "CI gate: compile, unit tests, plugin verifier, and package the WIT plugin."
+        dependsOn("compileKotlin", "compileTestKotlin", "test", "verifyPlugin", "buildPlugin")
     }
 }
 

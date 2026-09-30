@@ -28,3 +28,6 @@ build/
 *.swp
 *~
 __pycache__/
+
+# Local extraction scratch
+_tmp*/
