@@ -1,0 +1,18 @@
+namespace* tests.literal.number;
+
+
+0b0;
+0b1;
+0b10;
+0b11;
+
+0x0;
+0x1;
+0xF;
+0xFF;
+0xFFF;
+
+
+
+
+0a_b_c_d;

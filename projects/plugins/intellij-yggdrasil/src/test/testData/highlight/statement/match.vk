@@ -1,0 +1,15 @@
+
+
+match cond {
+    when A:
+        print("a")
+    when B:
+        print("b")
+    when _:
+        print("other")
+}
+
+
+match n? {
+
+}

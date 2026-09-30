@@ -1,0 +1,100 @@
+new A();
+
+new B {};
+
+new C() {
+
+};
+
+object(Base) {
+
+}
+
+
+object: Super {
+    offset: int = a() {
+
+    }
+
+    override get() {
+        64
+    }
+}
+
+object⟨SUPER⟩(Super): Super {
+    super;
+    super
+    super: SUPER = super {
+        get super()
+        super = super
+    };
+    #[super, super(super: super)]
+    super super {
+        super super;
+        super super {
+            get super()
+            super = super
+        }
+    }
+}
+
+
+
+
+
+E⟨⟩(){};
+
+new
+Integer
+⟨
+A
+⟩
+(
+    A
+)
+{
+    A
+}
+
+new stack List⟨Any⟩(10)
+{
+    "term",
+    0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+}
+
+new stack List⟨T: Integer⟩(capacity: 10)
+{
+    0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+}
+
+new stack List {
+    ..item1,
+    ..item2,
+    ..(tuple1, ),
+    ...(key: key, value),
+    key: value
+}
+
+
+
+new keywords BaseballTeam ⟨T⟩ (args) {
+    name: "object one",
+    Size: Math::PI,
+    ["RF"]: "Mookie Betts",
+    ["CF"]: "Mike Trout",
+    (key),
+    (key, ),
+    (key, value),
+    (key, value1, value2),
+    new IndexersExample {
+        [1]: '1',
+        [2]: '4',
+        [3]: '9',
+        ['C', 4]: "Middle C",
+        ['A', 4]: "440 Hz",
+        ['F', 7]: "F above middle C",
+        ['C', 'A', 0]: "C above A above C above middle C",
+    },
+    [4]: "Jose Altuve",
+}
+

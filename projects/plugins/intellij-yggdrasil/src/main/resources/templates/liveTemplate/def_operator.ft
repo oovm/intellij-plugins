@@ -1,0 +1,3 @@
+$KIND$ `$OPERATOR$`() {
+$block$
+}

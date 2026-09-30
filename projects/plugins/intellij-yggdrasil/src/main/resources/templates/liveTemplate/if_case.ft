@@ -1,0 +1,5 @@
+<% if $condition$ %>
+$then$
+<% else %>
+$otherwise$
+<% end if %>

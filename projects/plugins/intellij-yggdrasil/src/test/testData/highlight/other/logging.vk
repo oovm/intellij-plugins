@@ -1,0 +1,30 @@
+using std.logging.*;
+
+
+
+
+#trace 0
+#print 100
+#blame 150
+#risky 175
+#alert 200
+#error 250
+#fatal 225
+
+
+#instrument(level: print)
+
+
+#instrument(skip_all, skip: [self, my_arg], fields: {
+	[incomplete, next: my_arg + 1]
+})
+
+function my_function(my_arg: usize) {
+    let result = input_1 + input_2;
+    ~~ Record the result as part of the current span.
+    logging::Span::current().record("result", &result);
+    ~~ Now, the result will also be included on this event!
+    logging::info!("calculation complete!");
+}
+
+Scope

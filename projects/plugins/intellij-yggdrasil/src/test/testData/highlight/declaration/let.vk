@@ -1,0 +1,21 @@
+let a;
+
+let a: () = ();
+
+let (mut a, ref b) = (i32, &i32);
+
+let (mut a, ref b): (i32, &i32);
+
+let a = [1,2,3];
+
+let `let` a = 1
+
+let (mut a, b): (u32, u32) = [1, 2];
+
+let (mut a, b) = (1, 2, 3);
+
+let (mut a, b) = [1, 2]
+
+let (mut a, b) = (1, 2)
+
+let case Fraction(mut a, b) = Fraction(1 ,2)

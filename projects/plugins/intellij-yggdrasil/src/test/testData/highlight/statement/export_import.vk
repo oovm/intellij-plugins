@@ -1,0 +1,19 @@
+~~ missing scope means public
+using { }
+using package.name;
+using `import` as @export;
+using package::name { };
+using {
+    super, package::a, package::b {
+        nested::{`import` as export, `export` as import}
+    }
+}
+using std::{
+    import, export,
+    @`import`, @`result`,
+    nested.{
+        `import` as @export,
+        @`export` as import,
+    }
+}
+using serde::{#Serialize, #Deserialize}

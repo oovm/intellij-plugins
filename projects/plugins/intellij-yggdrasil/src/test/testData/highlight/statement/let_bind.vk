@@ -1,0 +1,28 @@
+let a;
+let a: int;
+let a = 1;
+let a: int = 1;
+
+
+let mut a;
+let mut a, mut b;
+let (mut a, ): (int, ) = (1, );
+let (mut a, mut b): (int, int) = (1, 1);
+
+let Some(mut a, ref _, more ..a) = x;
+let Point {ref x: k := Some(e := (d, )), mut y: _, ...s} = y;
+
+
+let const a: Integer = 2;
+let (mut p, ref q, lazy rec r): (int,) = scope {
+    pass {}.await?
+};
+let Some(a) = maybe();
+let std::Pair(std::Some(a), b) = maybe();
+
+a = 2
+(b, c) = 2
+
+
+~~ 其 cps 形式是
+

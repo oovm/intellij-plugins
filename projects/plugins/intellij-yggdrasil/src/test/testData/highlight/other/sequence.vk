@@ -1,0 +1,83 @@
+class Sequence;
+class Dictionary;
+class Associative;
+
+class SequenceIterator {
+	term: Sequence
+	index: Integer
+}
+
+extends SequenceIterator: Iterator {
+	type Item = Sequence::Item
+	next(mut self) -> Option<Sequence::Item> {
+		if self.index >= self.term.length() {
+			return None;
+		};
+		let item = self.term.get(self.index);
+		self.index += 1;
+		return item;
+	}
+}
+
+trait Sequence<T>: Iterable<IteratorType: SequenceIterator, Item: T> {
+	length(self) -> Integer;
+	capacity(self) -> Integer {
+		self.length()
+	}
+	get(mut self, index: Integer) -> Sequence::Item;
+	override iterator(self) -> SequenceIterator {
+		new SequenceIterator [
+			term: self,
+			index: 0,
+		]
+	}
+
+	final `[]`(self, index: Integer) -> Sequence::Item {
+		self.get(index)
+	}
+}
+
+~~? 可以分成两段的序列
+trait LinearSequence<T>: Sequence<T> {
+	split(self, index: Integer) -> (lhs: Self, rhs: Self) {
+		return (
+			self.slice(0, index),
+			self.slice(index, self.length()),
+		);
+	}
+}
+
+~~? 可扩容的序列
+trait ScalableSequence<T>: Sequence<T> {
+	~~? 保证容量至少为 `capacity`，如果容量不足则扩容
+	push(mut self, item: T)
+	~~? 保证容量至少为 `capacity`，如果容量不足则扩容
+	pop(mut self) -> Sequence::Item
+	~~? 能把 other 的元素逐个放到左边
+	append(mut self, other: Sequence);
+	~~? 能把 other 的元素逐个放到右边
+	`extend`(mut self, other: Sequence);
+	shrink(mut self)
+	clear(mut self)
+
+	final infix `++`(mut self, other: Sequence) -> Sequence {
+		self.`extend`(other);
+		return self;
+	}
+}
+
+#silent
+exception class A {
+
+}
+
+~~? 可变的序列
+trait MutableSequence: Sequence {
+	 set(mut self, index: Integer, item: Sequence::Item);
+	 each(mut self, f: (Integer, Sequence::Item) -> ()) {
+		for i in 0..=self.length() {
+			f(i, self.get(i));
+		}
+	}
+}
+

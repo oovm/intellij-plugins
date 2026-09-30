@@ -1,0 +1,23 @@
+let num = [0, 1.0, 2.0];
+let unit = [1s, -1.0ms, 0x01 us, +1μs, 0x01`m/s`]
+
+let empty = "";
+let char = 'a';
+let triple = '''a'''
+let raw = r''''a''''
+let template = `t`'a{0}'
+let re = re"[^0-9]"
+let json = json"""
+{
+    key: "value"
+}
+"""
+
+let range = [-1..+1, -a..<+a, "a"..="z", 'A'..<'Z']
+
+let symbol = b;
+let function = a()
+let generic = a::<a>()[:, ::, 1::-1, : 0:];
+let a = a[a > 0]
+let a = f"{:?}"(t)
+let a = cf"%d"(t)

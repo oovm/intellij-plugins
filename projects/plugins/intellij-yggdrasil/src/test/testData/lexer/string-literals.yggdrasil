@@ -1,0 +1,16 @@
+// Yggdrasil 字符串字面量测试
+
+// 双引号字符串
+"hello"
+""
+"test string"
+
+// 单引号字符串
+'hello'
+''
+'test string'
+
+// 带转义字符的字符串
+"hello\nworld"
+"test\"quote"
+'hello\'world'

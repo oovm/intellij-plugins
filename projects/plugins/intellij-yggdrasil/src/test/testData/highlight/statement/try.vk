@@ -1,0 +1,39 @@
+let len = try Option<u32> {
+    _a = readline()!
+    _a.length()
+}
+
+try _ {
+
+}
+
+try () {
+
+}
+catch {
+
+}
+
+try Option<T> {
+
+}
+
+trait Biased {
+    function biased(self): bool;
+}
+
+extend<T> Option<T>: Biased {
+    function biased(self) = @matches(self, Some(_))
+}
+
+extend<T> Result<T>: Biased {
+    function biased(self) = @matches(self, Success(_))
+}
+
+match a {
+    [ ]:
+        fallthrough
+
+}
+
+|a| {}

@@ -1,0 +1,29 @@
+flags Empty {}
+
+flags OneFlag {
+    A,
+
+    get name() {
+
+    }
+}
+
+flags TestFlags2(u8): A + B {
+    A = 12 + 1,
+    Bb = 12 + 2,
+    Ccc = 3,
+}
+
+flags ManyEnums {
+    A = 1,
+    B = 2 ^ 5, ,
+    C = Base.A && Base.B,
+    D = TestFlags2[Self::A] || TestFlags2[Self::B],
+}
+
+flags ManyFlags {
+    A = 1,
+    B = 2 ^ 2,
+    C = Base.A && Base.B,
+    D = ManyEnums[Self::A] || ManyEnums[Self::B],
+}

@@ -1,0 +1,30 @@
+// Yggdrasil 语句测试
+
+// 类声明语句
+class TestClass {
+    '{' '}'
+}
+
+// 联合声明语句
+union TestUnion {
+    | TestClass
+}
+
+// 导入语句
+import "std/io"
+
+// 修饰符语句
+@style(string)
+class TestStyledClass {
+    "test"
+}
+
+// 原子类语句
+atomic class TestAtomic {
+    /[a-z]+/
+}
+
+// 忽略规则语句
+ignore class TestIgnore {
+    [\p{WhiteSpace}]
+}

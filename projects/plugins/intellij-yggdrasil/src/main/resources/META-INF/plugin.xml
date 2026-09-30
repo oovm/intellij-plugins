@@ -1,0 +1,14 @@
+<idea-plugin xmlns:xi="http://www.w3.org/2001/XInclude">
+	<id>Yggdrasil</id>
+	<name>Yggdrasil Language</name>
+	<vendor>voml</vendor>
+	<depends>com.intellij.modules.platform</depends>
+	<depends optional="true" config-file="integrations/plugin-with-ultimate.xml">com.jetbrains.ultimate</depends>
+	<depends optional="true" config-file="integrations/plugin-with-markdown.xml">org.intellij.plugins.markdown</depends>
+	<depends optional="true" config-file="integrations/plugin-with-rust.xml">org.rust.lang</depends>
+	<resource-bundle>messages.YggdrasilBundle</resource-bundle>
+	<extensions defaultExtensionNs="com.intellij">
+		<xi:include href="languages/yggdrasil.xml" parse="xml"/>
+	</extensions>
+	<xi:include href="actions/yggdrasil-actions.xml" parse="xml"/>
+</idea-plugin>

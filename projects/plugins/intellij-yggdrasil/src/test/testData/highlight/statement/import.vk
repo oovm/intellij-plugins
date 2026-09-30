@@ -1,0 +1,32 @@
+namespace test.import;
+
+using;
+using std;
+
+using torch
+using numpy as np
+using pandas.database as db
+
+using lib1.*
+using lib2::*
+using lib3 as z
+using lib4 as _
+using github.{
+    valkyrie.yggdrasil as yggdrasil,
+    valkyrie.yggdrasil::*
+    vampire {
+        knight,
+        hunter {
+            hunter1,
+            hunter2
+        }
+        mage.yggdrasil.*
+    }
+}
+
+using `python`.numpy;
+using `python`::numpy as npy;
+using `python`::{
+    numpy as np,
+    torch as tf;
+}

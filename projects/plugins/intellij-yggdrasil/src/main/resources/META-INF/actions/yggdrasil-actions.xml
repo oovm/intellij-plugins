@@ -1,0 +1,8 @@
+<actions>
+	<action id="valkyrie.create.file" class="yggdrasil.editing.actions.ValkyrieCreateFile">
+		<add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewHtmlFile"/>
+	</action>
+	<action id="valkyrie.macro.expand" class="yggdrasil.editing.actions.ExpandTemplate">
+		<add-to-group group-id="GenerateGroup" anchor="last"/>
+	</action>
+</actions>

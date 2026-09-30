@@ -1,0 +1,43 @@
+match a {
+    with a
+    with [a]
+    with [a, b]
+}
+
+<%#when with (expression: bool)#%>
+match _ {
+    when true:
+        @todo
+    when a != 0 && b:
+        @todo
+    when T as A:
+        @todo
+}
+
+match _ as a {
+    type AnyType:
+        @todo
+    type Debug + Display:
+        @todo
+    type name::TypeA | path::TypeB:
+        @todo
+    type List⟨Integer⟩:
+        @todo
+    type Array⟨Array⟨T⟩⟩:
+        @todo
+    type String if a.is_empty():
+        @todo
+    when var is not String:
+        var.length
+}
+
+match e := last as String {
+    case std::option::None:
+        @todo
+    case Some():
+        @todo
+    case std::option::Some(mut a, ref b: c := None):
+        @todo
+    case Success {a: b}:
+        @todo
+}

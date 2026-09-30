@@ -1,0 +1,33 @@
+namespace* tests.literal.escape;
+~~ empty
+'';
+"";
+~~ revert
+"'";
+'"';
+~~ newline
+"\n";
+r"\n";
+'\
+';
+~~ escape
+'\u{24}';
+'\u{03D6}';
+'\u{000024}';
+'\u{99999999}';
+'\n';
+'\a';
+
+
+json'
+{
+    nice: 123,
+    poe:  123
+}
+'
+
+re'ab[cd]'
+
+xml'
+<list>xml</list>
+'

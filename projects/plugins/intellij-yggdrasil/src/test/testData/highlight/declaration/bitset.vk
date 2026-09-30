@@ -1,0 +1,47 @@
+bitflag Bitflags: Debug + Copy + !Default {
+    A = 0b01
+    B = 0o02
+    C = 0x04
+    D = 8
+}
+
+public bitflag Flags {
+    A = 1 << 0
+    B = 1 << 1
+    C = 1 << 2
+    bitflag = A | B | C
+    `class` = 1 >> 8
+}
+
+test function  test() {
+    let e1 = Flags::A | Flags::C;
+    let e2 = Flags::B | Flags::C;
+    ~~ union
+    assert_eq!((e1 | e2), Flags::ABC);
+    ~~ intersection
+    assert_eq!((e1 & e2), Flags::C);
+    ~~ set difference
+    assert_eq!((e1 - e2), Flags::A);
+    ~~ set complement
+    assert_eq!(!e2, Flags::A);
+    ~~ set all bits to 1
+    e1.all();
+    ~~ set all bits to 0
+    e1.none();
+}
+
+extends Bitflags {
+    function get_bits(self) {
+
+    }
+    function as_bools(self) {
+
+    }
+}
+~~ always public
+#infix('|')
+function oppo logic_or(self, rhs: Self) -> Self {
+    Self::from(self.bits | rhs.bits)
+}
+
+unlimited

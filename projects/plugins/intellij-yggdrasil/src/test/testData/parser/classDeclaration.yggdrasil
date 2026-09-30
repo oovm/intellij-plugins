@@ -1,0 +1,32 @@
+// Yggdrasil 类声明测试
+
+// 基本类声明
+class TestClass {
+    '{' '}'
+}
+
+// 带成员的类声明
+class TestClassWithMembers {
+    '{'
+        TestMember (',' TestMember)* ','?
+    '}'
+}
+
+class TestMember {
+    TestIdentifier ':' TestType
+}
+
+class TestType {
+    TestIdentifier
+}
+
+// 原子类
+atomic class TestAtomic {
+    /[a-z]+/
+}
+
+// 带修饰符的类
+@style(string)
+class TestStyledClass {
+    "test"
+}

@@ -1,0 +1,15 @@
+<% for c in s if c.is_ascii %>
+
+
+<% end %>
+
+
+
+<% for c in s if c.is_ascii %>
+
+<% else %>
+
+<% end %>
+
+
+<%# macro a #%>

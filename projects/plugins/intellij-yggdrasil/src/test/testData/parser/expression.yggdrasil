@@ -1,0 +1,42 @@
+// Yggdrasil 表达式测试
+
+// 基本表达式
+class TestExpr {
+    TestAtom
+}
+
+// 原子表达式
+union TestAtom {
+    | TestIdentifier
+    | TestString
+    | TestNumber
+    | '(' TestExpr ')'
+}
+
+// 重复表达式
+class TestRepeat {
+    TestExpr '+'    // 至少一次
+    TestExpr '*'    // 零次或多次
+    TestExpr '?'    // 零次或一次
+}
+
+// 连接表达式
+class TestConcat {
+    TestExpr TestExpr
+}
+
+// 选择表达式
+class TestChoice {
+    TestExpr '|' TestExpr
+}
+
+// 分组表达式
+class TestGroup {
+    '(' TestExpr ')' 
+}
+
+// 修饰表达式
+class TestModifier {
+    '!' TestExpr    // 否定
+    '^' TestExpr    // 标记
+}

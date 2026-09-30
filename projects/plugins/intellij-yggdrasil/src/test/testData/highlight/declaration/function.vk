@@ -1,0 +1,111 @@
+namespace test.macroes;
+
+function name() {}
+
+macro module::`function`(): R / P {
+
+}
+
+inline function package::path::range(min: int, max: int, step: int): Range {
+    new lazy std::iterator::Range⟨int⟩() {
+        from: min,
+        till: max,
+        step: step,
+        _current: min,
+    }
+}
+
+micro name(a, k: T, p: U = 1) -> R {
+    print("Hello, world!")
+}
+
+
+#derive(Default, Debug, Serde)
+class TClass {
+    fields,
+}
+
+extends TClass {
+    functions
+}
+
+
+#[derive]
+function name(args) {
+    block
+}
+
+generic P {
+    where { P: AnyType }
+}
+function Print<P>(w: Write, ..parameters: P) {
+    lambda () { };
+}
+
+
+#require(safe)
+public static void fun main function main(args: List<String>, a) {
+
+}
+
+
+
+function a() {
+
+}
+
+
+
+
+
+base 1
+a⟦T⟧
+
+a⟬T⟭
+a⦅T⦆
+base 0
+
+a⦉T⦊
+
+#? 能被 @derive 的 trait
+@derive(Copy, Clone, Debug, PartialEq, Eq, Hash)
+@(Copy, Clone, Debug, PartialEq, Eq, Hash)
+derived macro A {
+
+}
+
+
+#? 隐式宏, 此类宏不需要
+implicit macro print() {
+
+}
+
+print("a")
+
+a[T]
+a⁅T⁆
+
+micro name<G, R>(g: G) -> R {
+    1 + 1
+    a in b
+    print("Hello, world!")
+}
+
+
+macro outer<L>(lhs: L) -> String {
+    #mut let mut count = 0
+}
+
+micro inner<R>(rhs: R) {
+    while count < 10 {
+        count += 1
+        print("{lhs} {rhs}")
+    }
+}
+    "{count}"
+}
+
+public static final micro main(mut args: [String]) -> Int {
+    outer("Hello")("world")
+    return 0
+}

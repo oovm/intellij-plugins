@@ -1,0 +1,79 @@
+using mod as x
+using mod as z
+using lib.*
+using mod::*
+
+
+
+public class Array {
+
+}
+
+trait Sequence {
+
+}
+
+trait Associate {
+	type Key;
+	type Value;
+}
+
+public class List {
+
+}
+
+template T {
+    where {
+
+    }
+    require {
+
+    }
+    ensure {
+    }
+}
+class NDArray {
+	meta dimension: Array<Integer>
+	meta data_type: T
+}
+
+
+function widge(type T: Type, data: T) {
+    object {
+        member: T,
+    }
+}
+
+let foo = widget(42, T: u8)
+let bar = widget("hello", T: u8)
+
+class String {
+	as_characters(self) -> Unicode
+	characters(self) {
+		self.as_characters().count()
+	}
+}
+
+
+#ndet
+function random() {
+	#liberate() {
+
+	}
+}
+
+#unlimited(non_det_evaluate)
+function multiply(a: i64, b: i64) i64 {
+    return a * b;
+}
+
+micro a() {
+
+}
+
+
+#allow(evaluate: [diverge, arbitrary])
+function main() -> Result<T> {
+    let len = #eval random();
+    const my_static_array: [len]u8 = undefined;
+}

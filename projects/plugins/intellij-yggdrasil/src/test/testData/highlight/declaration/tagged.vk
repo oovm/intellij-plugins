@@ -1,0 +1,33 @@
+variant Option<T> {
+    ~~/ No value.
+    #[lang = "None"]
+    #[stable(feature = "rust1", since = "1.0.0")]
+    None,
+    ~~/ Some value of type `T`.
+    #[lang = "Some"]
+    #[stable(feature = "rust1", since = "1.0.0")]
+    Some(#[stable(feature = "rust1", since = "1.0.0")] T),
+}
+
+variant Either<L, R> {
+    Left(T),
+    Riht(E),
+}
+
+variant Result<T, E>
+where E: Error
+{
+    Success(T),
+    Failure(E),
+}
+
+variant Validation {
+    Fine(T, [E]),
+    Fail(E, [E]),
+}
+
+extends Validation {
+    function is_true(self): bool {
+        @matches(self, Fine(_, []))
+    }
+}

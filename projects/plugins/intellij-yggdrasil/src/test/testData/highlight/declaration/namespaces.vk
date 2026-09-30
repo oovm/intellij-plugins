@@ -1,0 +1,5 @@
+namespace std;
+namespace! std.string;
+namespace? std.integer;
+namespace* std.decimal;
+

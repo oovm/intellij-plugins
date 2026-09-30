@@ -1,0 +1,12 @@
+~~ ascii form
+Object();
+Object(T, );
+Object(T, U, );
+
+~~ unicode form
+Object⟨⟩;
+Object⟨T⟩;
+Object⟨T, U⟩(1, 2);
+
+
+※str;

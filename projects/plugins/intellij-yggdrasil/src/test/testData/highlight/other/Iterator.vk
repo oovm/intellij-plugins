@@ -1,0 +1,33 @@
+trait Iterable {
+	type Item
+	type IteratorType <: Iterator { Item: Iterable.self.Item }
+	iterator: IteratorType;
+}
+
+trait Iterator {
+	type Item
+	next(self) -> Item {
+		return self.iterator.next();
+	}
+	prev(self) -> Item {
+		return self.iterator.prev();
+	}
+}
+
+trait MutableIterator: Iterator {
+	next(mut self) -> Mutable<Item> {
+        return self.iterator.next();
+    }
+    prev(mut self) -> Mutable<Item> {
+		return self.iterator.prev();
+	}
+}
+
+trait RandomIterator: Iterator {
+	next_nth(self, n: Integer) -> Item;
+	prev_nth(self, n: Integer) -> Item;
+}
+
+from_sequence
+from_associative
+

@@ -1,0 +1,172 @@
+class A {}
+
+value class B {}
+
+
+
+generic {
+
+}
+refine class Positive(Integer) {
+
+}
+
+violate {
+    y._private_field
+}
+
+generic {
+
+}
+function a() {
+    @assert ~~ 断言
+    @assume ~~ 假设
+    @refute ~~ 否定
+}
+
+
+generic T, U {
+    ~~ forall {f32, f64}
+    ~~ ~~ 前置
+    ~~ require {
+    ~~
+    ~~ }
+    ~~ ensure {}~~ 后置
+    ~~ where {}~~ 约束
+}
+class A {
+    inherit Base,
+    inherit Base2,
+}
+
+
+class B {
+    item,
+}
+
+
+
+class A(B, C): C + D {
+    pub static a(): Ref⟨B⟩ + D {
+        return 1
+    }
+    _a,
+    get a() {
+        return _a
+    }
+    set a() {
+        _a = value
+    }
+}
+
+generic T {
+    where {
+        T: Trait
+    }
+}
+~~ test
+#[Copy(Clone), Debug]
+~~ test
+#derive(PartialEq, Eq, Hash)
+class A⟨T⟩ {
+
+}
+class Empty1 {};
+
+class Empty2() {};
+
+
+#derive()
+compile_time reflect
+generic T, U {
+    where {
+        T: AnyType => U
+        U: AnyType
+    }
+}
+#Encode
+#Decode
+#[derive(Serialize, Deserialize)]
+public static dynamic_transaction_safe volatile final
+class Empty3⟨T⟩() {}
+
+open impart
+class Inherit1(public virtual XBase, inline YBase) {}
+
+open impart
+class Inherit2 {
+    public virtual
+    inherit x_base: XBase,
+    private inline
+    inherit _y_base: YBase,
+
+    constructor() {
+
+    }
+}
+
+#derive(Default, Debug, Encode, Decode)
+class 原神⟨T: Debug⟩(Integer): Clone + Debug {
+    启动(self) {
+        shell"F:\Games\Genshin Impact\UnityCrashHandler64.exe"
+    }
+    get value(self): Integer {
+        _integer
+    }
+    set value(mut self) {
+        _integer
+    }
+}
+
+class ClassA {
+    #decorator
+    field,
+    public static field: A,
+    item: String = "item",
+    method();
+
+    infix `/`(self, rhs: Self): Self / DivideZero {
+        return self / rhs
+    }
+    #inline
+    join⟨T, ⟩(mut self: T, other: T): T {
+        return self.append(other)
+    }
+}
+
+#derive(Default, Debug, Encode, Decode)
+class TestClass {
+
+}
+
+#derive(Default, Debug, Serde)
+class Class⟨T⟩
+{
+    #call
+    readonly
+    field1: u32,
+    readonly `field 2`: f64,
+    `class`    static
+    void      main,
+    mut       fields            : T,
+
+    #call1
+    #call2
+    try_add(  mut
+    self, args  ) {
+        block
+    }
+
+}
+
+
+extends std::Class {
+    functions() {
+        for  i, j, k    in
+        {
+
+        }
+
+    }
+}
+

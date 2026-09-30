@@ -1,0 +1,8 @@
+#derive(Debug, Serde)
+tagged $TaggedUnion$ {
+$Fields$
+}
+
+extends $TaggedUnion$ {
+$functions$
+}

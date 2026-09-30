@@ -1,0 +1,30 @@
+~~ sign
++a;
+-a;
+
+~~ unbox, unpack, unpack all
+*var;
+**var;
+⁑var;
+***var;
+⁂ var;
+a ** var;
+
+
+~~ inverse
+⅟a;
+
+~~ surd
+√2 + ∛3 + ∜5;
+√(2 + ∛(3 + ∜5));
+√∛∜x;
+
+~~ temperature
+20℃ + 30℉;
+
+~~ percentage
+2% + 3‰ + 5‱;
+(2% + (3‰ + 5))‱;
+x%‰‱;
+
+~~ tensor ᵀᴴᵀ

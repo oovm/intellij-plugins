@@ -1,0 +1,25 @@
+#main
+class Terminal {
+
+}
+
+class atomic Constants {
+    | ASCII_HEX ~ ASCII_DEC
+    | XID_START | XID_CONTINUE
+    | EMOJI
+}
+
+union atomic Repeats {
+    | Any                                // 1
+    | Any? | Any {0,1}                   // 0 ~ 1
+    | Any* | Any {} | Any {,} | Any {0,} // 0 ~ ∞
+    | Any+ | Any {1,}                    // 1 ~ ∞
+    | Any {2}                            // 2
+    | Any {2,}                           // 2 ~ ∞
+    | Any {,2} | Any {0,2}               // 0 ~ 2
+}
+
+macro paired(item, delimiter) {
+    | '(' ')'
+    | '(' item (delimiter item)* delimiter? ')'
+}

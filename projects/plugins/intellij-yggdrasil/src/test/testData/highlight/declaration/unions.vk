@@ -1,0 +1,30 @@
+namespace std.create.test;
+
+
+
+
+
+union TestUnion1 {}
+
+union A(BaseUnion): A + B {
+    A,
+    Bb,
+    Ccc,
+}
+
+union Test2{
+    Test,
+    Nothing,
+    Test{},
+    Field {
+        public static field_a,
+        mut field_b
+    },
+
+    nice(){
+        let field = 2;
+    }
+
+    display() {}
+}
+

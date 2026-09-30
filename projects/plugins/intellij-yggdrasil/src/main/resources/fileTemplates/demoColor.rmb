@@ -1,0 +1,25 @@
+#main
+class <SYM_CLASS>Terminal</SYM_CLASS> {
+
+}
+
+class <SYM_MODIFIER>atomic</SYM_MODIFIER> <SYM_CLASS>Constants</SYM_CLASS> {
+    | <SYM_CONSTANT>ASCII_HEX</SYM_CONSTANT> | <SYM_CONSTANT>ASCII_DEC</SYM_CONSTANT>
+    | <SYM_CONSTANT>XID_START</SYM_CONSTANT> | <SYM_CONSTANT>XID_CONTINUE</SYM_CONSTANT>
+    | <SYM_CONSTANT>EMOJI</SYM_CONSTANT>
+}
+
+union <SYM_MODIFIER>atomic</SYM_MODIFIER> <SYM_UNION>Repeats</SYM_UNION> {
+    | <KEYWORD>Any</KEYWORD>                                // 1
+    | <KEYWORD>Any</KEYWORD>? | <KEYWORD>Any</KEYWORD> {0,1}                   // 0 ~ 1
+    | <KEYWORD>Any</KEYWORD>* | <KEYWORD>Any</KEYWORD> {} | <KEYWORD>Any</KEYWORD> {,} | <KEYWORD>Any</KEYWORD> {0,} // 0 ~ ∞
+    | <KEYWORD>Any</KEYWORD>+ | <KEYWORD>Any</KEYWORD> {1,}                    // 1 ~ ∞
+    | <KEYWORD>Any</KEYWORD> {2}                            // 2
+    | <KEYWORD>Any</KEYWORD> {2,}                           // 2 ~ ∞
+    | <KEYWORD>Any</KEYWORD> {,2} | <KEYWORD>Any</KEYWORD> {0,2}               // 0 ~ 2
+}
+
+macro <SYM_FUNCTION>paired</SYM_FUNCTION>(<SYM_PARAMETER>item</SYM_PARAMETER>, <SYM_PARAMETER>delimiter</SYM_PARAMETER>) {
+    | '(' ')'
+    | '(' <SYM_PARAMETER>item</SYM_PARAMETER> (<SYM_PARAMETER>delimiter</SYM_PARAMETER> <SYM_PARAMETER>item</SYM_PARAMETER>)* <SYM_PARAMETER>delimiter</SYM_PARAMETER>? ')'
+}

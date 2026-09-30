@@ -1,0 +1,95 @@
+// Yggdrasil 语法解析测试
+
+// 完整的语法定义测试
+grammar TestGrammar {
+    file: '*.test'
+}
+
+// 入口规则测试
+entry union TestEntry {
+    | TestClass
+    | TestUnion
+}
+
+// 类声明测试
+class TestClass {
+    '{' (TestMember (',' TestMember)* ',')? '}'
+}
+
+class TestMember {
+    TestIdentifier ':' TestType
+}
+
+class TestType {
+    TestIdentifier
+}
+
+// 联合声明测试
+union TestUnion {
+    | TestClass #ClassOption
+    | TestString #StringOption
+}
+
+// 原子类测试
+atomic class TestString {
+    '"' /[^"\\]*/ '"'
+}
+
+// 修饰符测试
+@style(string)
+class TestStyledClass {
+    TestString
+}
+
+// 宏调用测试
+class TestMacroUsage {
+    @list('{', TestMember, '}', tail: 'optional')
+}
+
+// 导入语句测试
+class TestImportStatement {
+    import "test/path" as TestAlias
+    import "test/path" { TestImportItem, TestImportItem }
+}
+
+class TestImportItem {
+    TestIdentifier as TestIdentifier
+}
+
+// 忽略规则测试
+ignore class WhiteSpace {
+    [\p{WhiteSpace}]
+}
+
+@style(comment)
+ignore union TestComment {
+    | @comment_line('//')
+    | @comment_block('/*', '*/', nest: false)
+}
+
+// 表达式测试
+climb TestExpr {
+    | TestAtom #Atom
+    | '(' TestExpr ')' #Group
+    | TestExpr '+' #Repeat1
+    | TestExpr '*' #Repeats
+    | TestExpr '?' #Optional
+    | TestExpr TestExpr #Concat
+    | TestExpr '|' TestExpr #Choice
+}
+
+union TestAtom {
+    | TestIdentifier
+    | TestString
+    | TestNumber
+}
+
+atomic class TestNumber {
+    /[0-9]+/
+}
+
+// 分支标记测试
+class TestBranchedUnion {
+    | TestClass #ClassBranch
+    | TestString #StringBranch
+}

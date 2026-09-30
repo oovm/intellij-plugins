@@ -1,0 +1,6 @@
+macro a {
+    ~~ current package name
+    package::a
+    ~~ caller's package name
+    package_caller::a
+}

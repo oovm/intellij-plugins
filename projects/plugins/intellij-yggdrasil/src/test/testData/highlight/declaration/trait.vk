@@ -1,0 +1,135 @@
+trait A: Trait + Trait
+{
+
+}
+generic F {
+    where {
+        F: AnyType -> AnyType
+    }
+}
+trait Functor< F > {
+
+~~ map<A, B>(self: F<A>, f: (a: A) -> B) -> F<B>
+}
+
+
+~~ trait Fn<Ret, **Args> {
+~~     function call(self, **_: Args) -> Ret;
+~~ }
+trait Functor<F> {
+   generic A, B {}
+   function map(a: F<A>, f: Function<A, B>) -> F<B>;
+}
+
+function flatMap<B>(f: A => List[B]): List<B>
+
+
+trait SemiGroup<T>:
+  extension (x: T) function combine (y: T): T
+
+trait Monoid[T] extends SemiGroup[T]:
+  function unit: T
+given Monoid[String] with
+  extension (x: String) function combine (y: String): String = x.concat(y)
+  function unit: String = ""
+
+
+trait SemiGroup {
+     combine(self, rhs: Self): Self
+}
+
+trait Monoid: SemiGroup + Default {
+     empty(): Self
+}
+
+extends String: Monoid<String> {
+     combine(self, y: Self) = self.concat(y)
+     unit() = ""
+}
+
+let a = String::unit()
+
+extends T: T::
+
+
+trait Functor[F[_]]:
+  function map[A, B](x: F[A], f: A => B): F[B]
+given Functor[List] with
+  function map[A, B](x: List[A], f: A => B): List[B] =
+    x.map(f) ~~ List already has a `map` method
+
+
+trait Functor<F<_>> {
+    function flat_map<A, B>(self: F<A>, f: A -> B): F<B>
+}
+
+
+trait Functor {
+    function flat_map<A, B>(self: Functor<A>, f: A -> B) -> Functor<B>;
+}
+
+trait Functor {
+    function flat_map<A, B, F: Mutable<A> -> B>(self: Self<A>, f: F) -> Self<B>;
+}
+
+extends Option: Functor {
+    function map<A, B, F: FnMut(A) -> B>(self: Option<A>, f: F) -> Option<B> {
+        match self {
+            Some(a) => Some(f(a)),
+            None => None,
+        }
+    }
+}
+
+trait Functor<A, B>: HKT<A, B> {
+    function fmap<F>(self, f: F) -> <Self as HKT<A, B>>::Target
+        where F: A -> B;
+}
+
+forall {Self : * -> *}
+trait Functor {
+    forall F { F: A -> B }
+    function fmap<F>(self, f : F) -> Self<B>
+}
+
+trait<B> Functor {
+    function fmap<F>(self, f: F) -> Self::Target
+    where
+        F: FnOnce(Self::Current) -> B;
+}
+
+trait<A> Functor {
+    function fmap<B>(self, f: A -> B) -> Self<B>
+}
+
+forall A {Self : A -> _}
+trait Functor {
+    function flat_map<B>(f : A -> B) -> Self<B>
+}
+trait<A> Pointed { func point(x : A) -> Self<A> }
+
+
+~~ ignore Functor, etc. dependencies for this demo
+trait<A> Monad {
+  function unit() -> Self<A>
+  function bind<B>(self, f : A -> Self<B>) -> Self<B>
+}
+
+trait<M: Monad, A> MonadTrans {
+  init(lifting: M<A>) -> Self<M, A>
+}
+
+extends<A> Array<A>: Functor {
+    function fmap<B>(self, f: A -> B) -> Array<B> {
+        return map(f, self)
+    }
+}
+
+
+
+extends<A> Array<A>: Functor<A> {
+    type A = i32;
+    function fmap<B>(self, f: A -> B) -> Array<B> {
+        return map(f, self)
+    }
+}

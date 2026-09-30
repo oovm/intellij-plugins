@@ -1,0 +1,12 @@
+function function() {}
+
+function eager function() {}
+function function(self, ...list: List , <, >) {}
+function function(input: Integer = 0) {}
+
+function \\\*\\\ function() -> Integer \\\*\\\ {}
+function \\\*\\\ function() / DivideZero \\\*\\\ {}
+
+function eager function(mut self, <, input: Integer = 0, >, ^list: List) -> Integer / [DivideZero, ParseError] {
+
+}

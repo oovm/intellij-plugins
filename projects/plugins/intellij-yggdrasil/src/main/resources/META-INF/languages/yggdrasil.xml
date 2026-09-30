@@ -1,0 +1,77 @@
+		<fileType
+			name="yggdrasil"
+			language="yggdrasil"
+			extensions="ygg;yggdrasil;"
+			implementationClass="yggdrasil.surface.file.YggdrasilFileType"
+			fieldName="INSTANCE"/>
+		<lang.parserDefinition
+			language="yggdrasil"
+			implementationClass="yggdrasil.surface.psi.YggdrasilParserDefinition"/>
+		<multiHostInjector implementation="yggdrasil.editing.assist.LanguageInjector"/>
+		<iconProvider implementation="yggdrasil.surface.file.YggdrasilIconProvider"/>
+		<lang.psiStructureViewFactory
+			language="yggdrasil"
+			implementationClass="yggdrasil.editing.structure.YggdrasilStructureView"/>
+		<breadcrumbsInfoProvider implementation="yggdrasil.editing.structure.YggdrasilBreadcrumbsProvider"/>
+		<colorSettingsPage implementation="yggdrasil.editing.highlight.HighlightSetting"/>
+		<highlightVisitor implementation="yggdrasil.editing.highlight.YggdrasilSemanticHighlighter"/>
+		<lang.syntaxHighlighter
+			language="yggdrasil"
+			implementationClass="yggdrasil.editing.highlight.YggdrasilSyntaxHighlighter"
+		/>
+		<lang.formatter language="yggdrasil" implementationClass="yggdrasil.editing.format.FormatBuilder"/>
+		<langCodeStyleSettingsProvider implementation="yggdrasil.editing.format.codestyle.YggdrasilCodeStyleSettings"/>
+		<symbolNavigation
+			forClass="yggdrasil.semantic.symbol.ValkyrieSymbolTemplate"
+			implementationClass="yggdrasil.semantic.resolve.VSymbolNavigationProvider"/>
+		<codeInsight.gotoSuper language="yggdrasil" implementationClass="yggdrasil.editing.navigation.GotoSuper"/>
+		<importFilteringRule implementation="yggdrasil.editing.navigation.ValkyrieImportFilter"/>
+		<usageFilteringRuleProvider implementation="yggdrasil.editing.navigation.usageFiltering"/>
+		<codeInsight.parameterInfo language="yggdrasil" implementationClass="yggdrasil.editing.inlay.ParameterInfoHint"/>
+		<codeInsight.parameterNameHints language="yggdrasil"
+		                                implementationClass="yggdrasil.editing.inlay.ParameterInlayProvider"/>
+		<codeInsight.lineMarkerProvider
+			language="yggdrasil"
+			implementationClass="yggdrasil.editing.gutter.YggdrasilLineMarkerProvider"
+		/>
+		<vcs.codeVisionLanguageContext
+			language="yggdrasil"
+			implementationClass="yggdrasil.editing.inlay.AuthorAbove"
+		/>
+		<psi.referenceContributor
+			language="yggdrasil"
+			implementation="yggdrasil.semantic.resolve.ValkyrieReferenceContributor"
+		/>
+		<lang.namesValidator language="yggdrasil" implementationClass="yggdrasil.semantic.inspect.ValkyrieNameValidator"/>
+		<typedHandler implementation="yggdrasil.editing.completion.AutoInsertBrace"/>
+		<backspaceHandlerDelegate implementation="yggdrasil.editing.completion.AutoDeleteBrace"/>
+		<lang.commenter language="yggdrasil" implementationClass="yggdrasil.editing.format.YggdrasilCommenter"/>
+		<lang.braceMatcher
+			language="yggdrasil"
+			implementationClass="yggdrasil.editing.assist.BraceMatch"
+		/>
+		<lang.quoteHandler
+			language="yggdrasil"
+			implementationClass="yggdrasil.editing.assist.QuoteHandler"
+		/>
+		<codeCompletionConfigurable instance="yggdrasil.editing.completion.CompletionConfig"/>
+		<completion.contributor
+			language="yggdrasil"
+			implementationClass="yggdrasil.editing.completion.CompletionRegistrar"
+		/>
+		<nameSuggestionProvider implementation="yggdrasil.editing.completion.CompletionSuggestion"/>
+		<lang.foldingBuilder
+			language="yggdrasil"
+			implementationClass="yggdrasil.editing.assist.ValkyrieFoldingBuilder"
+		/>
+		<codeBlockProvider language="yggdrasil" implementationClass="yggdrasil.editing.assist.CodeBlockProvider"/>
+		<codeFoldingOptionsProvider instance="yggdrasil.editing.assist.ValkyrieFoldingOptions"/>
+		<referenceImporter implementation="yggdrasil.editing.completion.ValkyrieImportInsert"/>
+		<lang.importOptimizer
+			language="yggdrasil"
+			implementationClass="yggdrasil.editing.completion.ValkyrieImportOptimizer"
+		/>
+		<lang.documentationProvider
+			language="yggdrasil"
+			implementationClass="yggdrasil.editing.documentation.DocumentationProvider"
+		/>

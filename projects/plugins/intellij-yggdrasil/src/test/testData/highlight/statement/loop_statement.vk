@@ -1,0 +1,69 @@
+while true {
+    match a {
+        case 1:
+            break
+        case 3:
+            continue
+        case 2:
+            yield 2
+        case 4:
+            return 4
+        case 5:
+            yield return 5
+        else:
+            yield break
+    }
+}
+
+for item in iterable {
+    block
+}
+
+
+for i in list {
+    #parallel
+    for (k, mut v) in list.enumerate if k > 0 {
+        for loop, item in list.looper {
+            print("{loop.index}")
+        }
+    }
+}
+
+for (k, v) in ℤ[-1: 1] if i > 0 {
+    for (i, j) in ℤ⁅-1: 1: 2⁆if i > 0 {
+        looping
+    }
+}
+
+#parallel
+for mut a, ref b in items {
+    for (mut a, ref b, ..) in items {
+        for Some(mut a, ref _, mut ..a) in items {
+
+            for Point {mut x: p := Some(e := (q, )), mut y: _, ...s} in items {
+
+            }
+        }
+    }
+}
+
+
+
+while k != n && i == j {
+    until let Some(a, Some(c := (a, b))) = next {
+        while let Success {a: Some(c := Result { c })} = next {
+            print("Deeper loop!");
+        }
+    }
+}
+
+
+function sum3(tensor1, tensor2, tensor3) : Iterator⟨Integer⟩ {
+    for i1 in tensor1 {
+        for i2, mut j2 in tensor2 {
+            for i3, mut j3, ref k3 in tensor3 {
+                yield i1 + i2 + i3;
+            }
+        }
+    }
+}

@@ -1,0 +1,21 @@
+// Yggdrasil 导入语句测试
+
+// 基本导入
+import "std/io"
+import "std/math"
+
+// 带别名的导入
+import "std/io" as IO
+import "std/math" as Math
+
+// 选择性导入
+import "std/io" {
+    println,
+    readLine
+}
+
+// 带别名的选择性导入
+import "std/math" {
+    pi,
+    sqrt as squareRoot
+}

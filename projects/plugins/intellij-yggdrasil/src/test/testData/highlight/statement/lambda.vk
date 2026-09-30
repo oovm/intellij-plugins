@@ -1,0 +1,22 @@
+a {
+
+}
+
+
+s(args) {
+    print("hello")
+}
+
+
+
+chain
+    .{ body }
+    .map {
+        print("hello")
+    }
+    .select {
+        $x > 0
+    }
+    .reject {
+        $x > 5
+    }
