@@ -31,7 +31,7 @@ jobs:
 
       - name: Upload Fluent artifact
         if: success()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: intellij-fluent
           path: projects/plugins/intellij-fluent/build/distributions/*.zip
@@ -39,7 +39,7 @@ jobs:
 
       - name: Upload test report
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: test-report
           path: projects/plugins/intellij-fluent/build/reports/tests
