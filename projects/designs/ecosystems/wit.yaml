@@ -1,0 +1,7 @@
+id: wit
+plugin: intellij-wit
+repo: intellij-plugins
+languages:
+  - wit
+  - witx
+marketplace_id: wit

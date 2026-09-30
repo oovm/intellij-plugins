@@ -25,6 +25,8 @@ repositories {
 }
 
 dependencies {
+    implementation(project(":packages"))
+
     testImplementation(libs.junit)
 
     intellijPlatform {
@@ -111,6 +113,10 @@ tasks {
         if (System.getProperty("regenerate") != null) {
             systemProperty("regenerate", System.getProperty("regenerate"))
         }
+    }
+
+    named("prepareJarSearchableOptions") {
+        enabled = false
     }
 
     register("ciVerify") {

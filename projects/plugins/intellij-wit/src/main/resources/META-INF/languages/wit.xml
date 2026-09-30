@@ -1,0 +1,26 @@
+        <fileType
+            name="WIT"
+            language="WIT"
+            extensions="wit"
+            implementationClass="wit.surface.file.WitFileType"
+            fieldName="INSTANCE"
+        />
+        <lang.parserDefinition
+            language="WIT"
+            implementationClass="wit.surface.psi.WitParserDefinition"
+        />
+        <additionalTextAttributes scheme="Default" file="colors/WitDefault.xml"/>
+        <additionalTextAttributes scheme="Darcula" file="colors/WitDarcula.xml"/>
+        <colorSettingsPage implementation="wit.editing.highlight.WitHighlightSetting"/>
+        <lang.syntaxHighlighter
+            language="WIT"
+            implementationClass="wit.editing.highlight.WitSyntaxHighlighter"
+        />
+        <lang.commenter
+            language="WIT"
+            implementationClass="wit.editing.comment.WitCommenter"
+        />
+        <lang.braceMatcher
+            language="WIT"
+            implementationClass="wit.editing.matcher.WitBraceMatcher"
+        />

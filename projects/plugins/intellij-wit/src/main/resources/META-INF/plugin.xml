@@ -1,35 +1,11 @@
-<idea-plugin>
+<idea-plugin xmlns:xi="http://www.w3.org/2001/XInclude">
 	<id>wit</id>
 	<name>WIT IDL</name>
 	<vendor>Bytecode Alliance</vendor>
 	<depends>com.intellij.modules.platform</depends>
 	<resource-bundle>messages.WitBundle</resource-bundle>
 	<extensions defaultExtensionNs="com.intellij">
-		<fileType
-			name="WIT"
-			language="WIT"
-			extensions="wit;witx"
-			implementationClass="com.github.bytecodealliance.wit.language.file.WitFileType"
-			fieldName="INSTANCE"
-		/>
-		<lang.parserDefinition
-			language="WIT"
-			implementationClass="com.github.bytecodealliance.wit.language.psi.WitParserDefinition"
-		/>
-		<additionalTextAttributes scheme="Default" file="colors/WitDefault.xml"/>
-		<additionalTextAttributes scheme="Darcula" file="colors/WitDarcula.xml"/>
-		<colorSettingsPage implementation="com.github.bytecodealliance.wit.ide.highlight.WitHighlightSetting"/>
-		<lang.syntaxHighlighter
-			language="WIT"
-			implementationClass="com.github.bytecodealliance.wit.ide.highlight.WitSyntaxHighlighter"
-		/>
-		<lang.commenter
-			language="WIT"
-			implementationClass="com.github.bytecodealliance.wit.ide.comment.WitCommenter"
-		/>
-		<lang.braceMatcher
-			language="WIT"
-			implementationClass="com.github.bytecodealliance.wit.ide.matcher.WitBraceMatcher"
-		/>
+		<xi:include href="languages/wit.xml" parse="xml"/>
+		<xi:include href="languages/witx.xml" parse="xml"/>
 	</extensions>
 </idea-plugin>

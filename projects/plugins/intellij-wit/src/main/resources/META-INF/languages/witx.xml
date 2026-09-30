@@ -1,0 +1,26 @@
+        <fileType
+            name="WITX"
+            language="WITX"
+            extensions="witx"
+            implementationClass="witx.surface.file.WitxFileType"
+            fieldName="INSTANCE"
+        />
+        <lang.parserDefinition
+            language="WITX"
+            implementationClass="witx.surface.psi.WitxParserDefinition"
+        />
+        <additionalTextAttributes scheme="Default" file="colors/WitDefault.xml"/>
+        <additionalTextAttributes scheme="Darcula" file="colors/WitDarcula.xml"/>
+        <colorSettingsPage implementation="witx.editing.highlight.WitxHighlightSetting"/>
+        <lang.syntaxHighlighter
+            language="WITX"
+            implementationClass="witx.editing.highlight.WitxSyntaxHighlighter"
+        />
+        <lang.commenter
+            language="WITX"
+            implementationClass="witx.editing.comment.WitxCommenter"
+        />
+        <lang.braceMatcher
+            language="WITX"
+            implementationClass="witx.editing.matcher.WitxBraceMatcher"
+        />
