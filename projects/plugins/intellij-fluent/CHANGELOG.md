@@ -3,6 +3,10 @@
 # Fluent Intellij Changelog
 
 ## [Unreleased]
+### Changed
+- Move Fluent language implementation into `packages/fluent` with `fluent.*` layer layout
+- Split `intellij-fluent` plugin descriptors under `META-INF/languages` and `META-INF/actions`
+- Keep Vue and Markdown integrations in `fluent.plugin.integration`
 
 ## [0.4.7]
 ### Added

@@ -1,0 +1,6 @@
+id: fluent
+plugin: intellij-fluent
+repo: intellij-plugins
+languages:
+  - fluent
+marketplace_id: FluentLanguage
