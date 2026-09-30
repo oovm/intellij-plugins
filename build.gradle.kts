@@ -27,6 +27,7 @@ tasks {
             ":plugins:intellij-fluent:ciVerify",
             ":plugins:intellij-jss:ciVerify",
             ":plugins:intellij-wit:ciVerify",
+            ":plugins:intellij-yggdrasil:ciVerify",
         )
     }
 
