@@ -1,5 +1,0 @@
-♻️ Move JSS language from os.* to packages/jss
-
-Register intellij-jss for language=JSS and .jss only.
-Rename bundles, tests, and plugin shell to jss.*.
-Add projects/designs/ecosystems/jss.yaml.
