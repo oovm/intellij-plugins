@@ -118,3 +118,4 @@ tasks {
 // Load every `:plugins/*` Marketplace plugin together in the IDE sandbox.
 // Packaging stays isolated: this module's `buildPlugin` / `publishPlugin` only emit this plugin's zip.
 apply(from = rootProject.file("gradle/ide-all-plugins.gradle.kts"))
+apply(from = rootProject.file("gradle/plugin-xinclude.gradle.kts"))
