@@ -1,9 +1,9 @@
-package com.github.projectfluent.ide.view
+package fluent.editing.structure
 
-import com.github.projectfluent.language.psi.nodes.FluentAttributeNode
-import com.github.projectfluent.language.psi.nodes.FluentFileNode
-import com.github.projectfluent.language.psi.nodes.FluentMessageNode
-import com.github.projectfluent.language.psi.nodes.FluentTermNode
+import fluent.surface.psi.nodes.FluentAttributeNode
+import fluent.surface.psi.nodes.FluentFileNode
+import fluent.surface.psi.nodes.FluentMessageNode
+import fluent.surface.psi.nodes.FluentTermNode
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 
 class FluentStructureViewTest : BasePlatformTestCase() {

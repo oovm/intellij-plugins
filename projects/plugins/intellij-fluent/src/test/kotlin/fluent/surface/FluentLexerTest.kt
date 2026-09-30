@@ -1,7 +1,7 @@
-package com.github.projectfluent.language
+package fluent.surface
 
-import com.github.projectfluent.language.psi.FluentLexer
-import com.github.projectfluent.language.psi.FluentTypes
+import fluent.surface.psi.FluentLexer
+import fluent.surface.psi.FluentTypes
 import com.intellij.lexer.Lexer
 import com.intellij.testFramework.LexerTestCase
 import com.intellij.openapi.util.text.StringUtil

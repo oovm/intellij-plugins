@@ -1,8 +1,8 @@
-package com.github.projectfluent.ide
+package fluent.plugin.integration
 
-import com.github.projectfluent.FluentLanguage
-import com.github.projectfluent.ide.highlight.FluentMarkdownFenceLanguageProvider
-import com.github.projectfluent.ide.highlight.InjectVue
+import fluent.definition.FluentLanguage
+import fluent.plugin.integration.FluentMarkdownFenceLanguageProvider
+import fluent.plugin.integration.InjectVue
 import com.intellij.lang.injection.MultiHostRegistrar
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiLanguageInjectionHost

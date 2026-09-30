@@ -1,4 +1,4 @@
-package com.github.projectfluent.ide
+package fluent.editing
 
 import com.intellij.openapi.util.io.FileUtil
 import com.intellij.openapi.util.text.StringUtil

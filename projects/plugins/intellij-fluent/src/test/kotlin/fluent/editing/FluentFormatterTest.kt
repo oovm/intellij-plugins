@@ -1,4 +1,4 @@
-package com.github.projectfluent.ide
+package fluent.editing
 
 import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.psi.codeStyle.CodeStyleManager

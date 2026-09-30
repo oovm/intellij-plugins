@@ -1,8 +1,8 @@
-package com.github.projectfluent.language
+package fluent.surface
 
-import com.github.projectfluent.language.psi.FluentTypes
-import com.github.projectfluent.language.psi.nodes.FluentMessageNode
-import com.github.projectfluent.language.psi.nodes.FluentFileNode
+import fluent.surface.psi.FluentTypes
+import fluent.surface.psi.nodes.FluentMessageNode
+import fluent.surface.psi.nodes.FluentFileNode
 import com.intellij.openapi.util.io.FileUtil
 import com.intellij.psi.impl.DebugUtil
 import com.intellij.psi.PsiErrorElement
