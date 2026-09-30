@@ -1,10 +1,10 @@
-package com.github.projectfluent.ide.highlight
+package fluent.plugin.integration
 
-import com.github.projectfluent.FluentLanguage
 import com.intellij.codeInsight.completion.CompletionParameters
 import com.intellij.codeInsight.lookup.LookupElement
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.lang.Language
+import fluent.definition.FluentLanguage
 import org.intellij.plugins.markdown.injection.CodeFenceLanguageProvider
 
 /**

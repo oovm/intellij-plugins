@@ -1,6 +1,5 @@
-package com.github.projectfluent.ide.highlight
+package fluent.plugin.integration
 
-import com.github.projectfluent.FluentLanguage
 import com.intellij.lang.injection.MultiHostInjector
 import com.intellij.lang.injection.MultiHostRegistrar
 import com.intellij.openapi.util.TextRange
@@ -8,6 +7,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiLanguageInjectionHost
 import com.intellij.psi.xml.XmlTag
 import com.intellij.psi.xml.XmlText
+import fluent.definition.FluentLanguage
 
 class InjectVue : MultiHostInjector {
     override fun getLanguagesToInject(registrar: MultiHostRegistrar, context: PsiElement) {
