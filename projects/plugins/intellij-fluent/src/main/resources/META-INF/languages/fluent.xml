@@ -1,4 +1,3 @@
-<extensions defaultExtensionNs="com.intellij">
         <fileType
             name="Fluent"
             language="Fluent"
@@ -47,4 +46,3 @@
         />
         <multiHostInjector implementation="fluent.plugin.integration.InjectVue"/>
         <psi.referenceContributor implementation="fluent.semantic.resolve.FluentReferenceContributor"/>
-</extensions>

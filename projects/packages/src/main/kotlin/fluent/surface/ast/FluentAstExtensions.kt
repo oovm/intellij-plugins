@@ -31,4 +31,3 @@ fun Block.computeSpacing(child1: Block?, child2: Block, ctx: FluentFormatSpace):
     return null
 }
 
-
