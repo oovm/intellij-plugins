@@ -27,3 +27,4 @@ build/
 *.temp
 *.swp
 *~
+__pycache__/

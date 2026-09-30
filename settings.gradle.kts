@@ -18,8 +18,10 @@ include(
     "plugins:intellij-fluent",
     "plugins:intellij-jss",
     "plugins:intellij-wit",
+    "plugins:intellij-yggdrasil",
 )
 project(":plugins").projectDir = file("projects/plugins")
 project(":plugins:intellij-fluent").projectDir = file("projects/plugins/intellij-fluent")
 project(":plugins:intellij-jss").projectDir = file("projects/plugins/intellij-jss")
 project(":plugins:intellij-wit").projectDir = file("projects/plugins/intellij-wit")
+project(":plugins:intellij-yggdrasil").projectDir = file("projects/plugins/intellij-yggdrasil")

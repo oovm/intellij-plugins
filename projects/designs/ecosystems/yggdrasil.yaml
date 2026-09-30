@@ -1,0 +1,6 @@
+id: yggdrasil
+plugin: intellij-yggdrasil
+repo: intellij-plugins
+languages:
+  - yggdrasil
+marketplace_id: Yggdrasil

@@ -7,6 +7,7 @@ Multi-plugin workspace for JetBrains Marketplace plugins and one shared library.
 | [`projects/plugins/intellij-fluent`](projects/plugins/intellij-fluent) | Fluent language plugin (`README.md` / `CHANGELOG.md` live here) |
 | [`projects/plugins/intellij-jss`](projects/plugins/intellij-jss) | JSS language plugin (`.jss`) |
 | [`projects/plugins/intellij-wit`](projects/plugins/intellij-wit) | WIT IDL plugin (`.wit` / `.witx`) |
+| [`projects/plugins/intellij-yggdrasil`](projects/plugins/intellij-yggdrasil) | Yggdrasil language plugin (`.ygg` / `.yggdrasil`) |
 | [`projects/packages`](projects/packages) | Shared code-only library (`:packages`) |
 | [`projects/designs`](projects/designs) | Brand assets and ecosystem manifests (`ecosystems/`, `jss/`, …) |
 
