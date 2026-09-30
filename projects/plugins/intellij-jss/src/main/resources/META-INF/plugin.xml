@@ -1,89 +1,12 @@
-<idea-plugin>
+<idea-plugin xmlns:xi="http://www.w3.org/2001/XInclude">
 	<id>com.github.voml.jss_intellij</id>
 	<name>JSS Support</name>
 	<vendor>voml</vendor>
-	<!-- Product and plugin compatibility requirements -->
-	<!-- https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html -->
 	<depends>com.intellij.modules.platform</depends>
 	<depends>com.intellij.modules.json</depends>
-	<!--    <depends optional="true" config-file="plugin-with-rust.xml">org.rust.lang</depends>-->
 	<resource-bundle>messages.JssBundle</resource-bundle>
 	<extensions defaultExtensionNs="com.intellij">
-		<fileType
-			name="JSS"
-			language="JSS"
-			extensions="jss"
-			implementationClass="jss.surface.file.JssFileType"
-			fieldName="INSTANCE"/>
-		<lang.parserDefinition
-			language="JSS"
-			implementationClass="jss.surface.file.JssParserDefinition"/>
-		<projectViewNestingRulesProvider implementation="jss.surface.file.FileGroup"/>
-		<!-- Highlight -->
-		<additionalTextAttributes scheme="Default" file="colors/JssDefault.xml"/>
-		<additionalTextAttributes scheme="Darcula" file="colors/JssDarcula.xml"/>
-		<annotator language="JSS" implementationClass="jss.semantics.inspect.EscapeAnnotator"/>
-		<colorSettingsPage implementation="jss.editing.highlight.ColorSettings"/>
-		<highlightVisitor implementation="jss.editing.highlight.HighlightAST"/>
-		<lang.syntaxHighlighter
-			language="JSS"
-			implementationClass="jss.editing.highlight.HighlightToken"/>
-		<!-- View -->
-		<lang.psiStructureViewFactory
-			language="JSS"
-			implementationClass="jss.editing.structure.ViewFactory"/>
-		<!-- Formatter -->
-		<lang.formatter
-			language="JSS"
-			implementationClass="jss.editing.format.FormatBuilder"/>
-		<lang.commenter
-			language="JSS"
-			implementationClass="jss.editing.format.Commenter"/>
-		<lang.smartEnterProcessor
-			language="JSS"
-			implementationClass="jss.editing.format.SmartEnter"/>
-		<!-- Document -->
-		<!--documentationProvider implementation="jss.editing.documentation.JssDocumentationExtender"-->
-		<!--		<psi.referenceContributor implementation="jss.editing.documentation.JssUrlReferenceContributor"/>-->
-		<lang.documentationProvider
-			language="JSS"
-			implementationClass="jss.editing.documentation.DocumentationProvider"/>
-		<lang.braceMatcher
-			language="JSS"
-			implementationClass="jss.editing.assist.JssBraceMatcher"/>
-		<lang.quoteHandler
-			language="JSS"
-			implementationClass="jss.editing.assist.JssQuoteHandler"/>
-		<lang.foldingBuilder
-			language="JSS"
-			implementationClass="jss.editing.assist.JssFoldingBuilder"/>
-		<indexPatternBuilder
-			implementation="jss.editing.todo.TodoIndexPatternBuilder"/>
-		<todoIndexer
-			filetype="JSS"
-			implementationClass="jss.editing.todo.TodoIndexer"/>
-		<completion.contributor
-			language="JSS"
-			implementationClass="jss.editing.completion.CompletionContributor"/>
-
-
-		<langCodeStyleSettingsProvider
-			implementation="jss.editing.format.codestyle.CodeStyleSettingProvider"/>
-
+		<xi:include href="languages/jss.xml" parse="xml"/>
 	</extensions>
-	<actions>
-		<action id="NewJssFile" class="jss.editing.actions.CreateFile">
-			<add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewHtmlFile"/>
-		</action>
-		<action id="jss.JssConvertJson"
-				class="jss.editing.actions.JssConvertJson"/>
-		<group id="jss.JssGenerator" popup="true" text="JssGenerator">
-			<reference ref="NewJssFile"/>
-			<reference ref="jss.JssConvertJson"/>
-			<add-to-group group-id="EditorPopupMenu" anchor="after" relative-to-action="Github.Create.Gist"/>
-			<add-to-group group-id="ProjectViewPopupMenu" anchor="after" relative-to-action="Github.Create.Gist"/>
-			<add-to-group group-id="EditorTabPopupMenu" anchor="after" relative-to-action="Github.Create.Gist"/>
-			<add-to-group group-id="ConsoleEditorPopupMenu" anchor="after" relative-to-action="Github.Create.Gist"/>
-		</group>
-	</actions>
+	<xi:include href="actions/jss-actions.xml" parse="xml"/>
 </idea-plugin>

@@ -1,0 +1,52 @@
+        <fileType
+            name="JSS"
+            language="JSS"
+            extensions="jss"
+            implementationClass="jss.surface.file.JssFileType"
+            fieldName="INSTANCE"/>
+        <lang.parserDefinition
+            language="JSS"
+            implementationClass="jss.surface.file.JssParserDefinition"/>
+        <projectViewNestingRulesProvider implementation="jss.surface.file.FileGroup"/>
+        <additionalTextAttributes scheme="Default" file="colors/JssDefault.xml"/>
+        <additionalTextAttributes scheme="Darcula" file="colors/JssDarcula.xml"/>
+        <annotator language="JSS" implementationClass="jss.semantic.inspect.EscapeAnnotator"/>
+        <colorSettingsPage implementation="jss.editing.highlight.ColorSettings"/>
+        <highlightVisitor implementation="jss.editing.highlight.HighlightAST"/>
+        <lang.syntaxHighlighter
+            language="JSS"
+            implementationClass="jss.editing.highlight.HighlightToken"/>
+        <lang.psiStructureViewFactory
+            language="JSS"
+            implementationClass="jss.editing.structure.ViewFactory"/>
+        <lang.formatter
+            language="JSS"
+            implementationClass="jss.editing.format.FormatBuilder"/>
+        <lang.commenter
+            language="JSS"
+            implementationClass="jss.editing.format.Commenter"/>
+        <lang.smartEnterProcessor
+            language="JSS"
+            implementationClass="jss.editing.format.SmartEnter"/>
+        <lang.documentationProvider
+            language="JSS"
+            implementationClass="jss.editing.documentation.DocumentationProvider"/>
+        <lang.braceMatcher
+            language="JSS"
+            implementationClass="jss.editing.assist.JssBraceMatcher"/>
+        <lang.quoteHandler
+            language="JSS"
+            implementationClass="jss.editing.assist.JssQuoteHandler"/>
+        <lang.foldingBuilder
+            language="JSS"
+            implementationClass="jss.editing.assist.JssFoldingBuilder"/>
+        <indexPatternBuilder
+            implementation="jss.editing.todo.TodoIndexPatternBuilder"/>
+        <todoIndexer
+            filetype="JSS"
+            implementationClass="jss.editing.todo.TodoIndexer"/>
+        <completion.contributor
+            language="JSS"
+            implementationClass="jss.editing.completion.CompletionContributor"/>
+        <langCodeStyleSettingsProvider
+            implementation="jss.editing.format.codestyle.CodeStyleSettingProvider"/>

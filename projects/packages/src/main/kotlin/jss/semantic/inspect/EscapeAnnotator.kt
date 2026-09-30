@@ -1,4 +1,4 @@
-package jss.semantics.inspect
+package jss.semantic.inspect
 
 
 import com.intellij.lang.annotation.AnnotationHolder
