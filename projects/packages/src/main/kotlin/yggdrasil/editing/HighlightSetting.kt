@@ -24,9 +24,7 @@ class HighlightSetting : ColorSettingsPage {
 
     override fun getAdditionalHighlightingTagToDescriptorMap() = annotatorTags
 
-    override fun getDemoText(): String {
-        val file = javaClass.getResource("/templates/code-highlight.ne");
-        return file?.readText() ?: ""
-    }
+    override fun getDemoText(): String =
+        javaClass.getResource("/fileTemplates/demoColor.yggdrasil")!!.readText()
 }
 

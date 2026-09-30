@@ -1,6 +1,5 @@
 #main
 class Terminal {
-
 }
 
 class atomic Constants {
@@ -22,4 +21,8 @@ union atomic Repeats {
 macro paired(item, delimiter) {
     | '(' ')'
     | '(' item (delimiter item)* delimiter? ')'
+}
+
+class Identifier {
+    XID_START XID_CONTINUE*
 }

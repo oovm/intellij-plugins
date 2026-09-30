@@ -10,7 +10,6 @@ import yggdrasil.surface.psi.ValkyrieAlignmentElement
 import yggdrasil.surface.psi.YggdrasilTypes
 import yggdrasil.surface.psi.nodes.*
 
-//import nexus.language.psi.ValkyrieTokenType
 
 class FormatBlock : ASTBlock {
     private val _node: ASTNode

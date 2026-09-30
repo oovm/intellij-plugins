@@ -5,8 +5,6 @@ import com.intellij.psi.util.elementType
 import yggdrasil.editing.documentation.DocumentationRenderer
 import yggdrasil.editing.highlight.HighlightColor
 
-//import nexus.language.psi.ValkyrieTypes
-
 @Suppress("MemberVisibilityCanBePrivate")
 class OperatorData(
     val name: String,

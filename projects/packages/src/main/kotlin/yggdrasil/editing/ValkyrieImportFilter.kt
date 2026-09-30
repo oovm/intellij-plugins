@@ -7,9 +7,6 @@ import com.intellij.usages.rules.PsiElementUsage
 import yggdrasil.surface.ast.ancestors
 import yggdrasil.surface.psi.nodes.YggdrasilIdentifierNode
 
-//import nexus.language.psi_node.ValkyrieIdentifierNode
-//import nexus.language.psi_node.ValkyrieImportStatementNode
-
 /**
  * 跳转结果里去掉 `using` 语句内的部分
  */

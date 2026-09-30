@@ -1,7 +1,6 @@
 package yggdrasil.editing.highlight
 
 
-//import nexus.language.psi_node.ValkyrieIdentifierNode
 import com.intellij.codeInsight.daemon.impl.HighlightInfo
 import com.intellij.codeInsight.daemon.impl.HighlightInfoType
 import com.intellij.codeInsight.daemon.impl.HighlightVisitor

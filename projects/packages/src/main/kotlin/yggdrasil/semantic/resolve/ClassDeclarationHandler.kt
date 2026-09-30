@@ -1,7 +1,5 @@
 package yggdrasil.semantic.resolve.declaration
 
-
-//import nexus.language.psi_node.ValkyrieClassStatementNode
 import com.intellij.codeInsight.hint.DeclarationRangeHandler
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.util.endOffset

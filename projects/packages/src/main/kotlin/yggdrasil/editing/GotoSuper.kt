@@ -9,9 +9,6 @@ import com.intellij.psi.PsiFile
 import com.intellij.psi.util.PsiTreeUtil
 import yggdrasil.surface.psi.nodes.YggdrasilDefineClass
 
-//import nexus.language.psi_node.ValkyrieClassStatementNode
-//import nexus.language.psi_node.ValkyrieTraitStatementNode
-
 class GotoSuper : GotoTargetHandler() {
     override fun getFeatureUsedKey() = GotoSuperAction.FEATURE_ID
     override fun getSourceAndTargetElements(editor: Editor, file: PsiFile): GotoData? {
