@@ -2,7 +2,6 @@ package yggdrasil.editing.highlight
 
 import com.intellij.lang.annotation.HighlightSeverity
 import com.intellij.openapi.editor.colors.TextAttributesKey
-import com.intellij.openapi.options.OptionsBundle
 import com.intellij.openapi.options.colors.AttributesDescriptor
 import com.intellij.openapi.util.NlsContexts.AttributeDescriptor
 import yggdrasil.definition.YggdrasilBundle
@@ -12,7 +11,7 @@ import com.intellij.openapi.editor.DefaultLanguageHighlighterColors as Default
 
 enum class HighlightColor(humanName: Supplier<@AttributeDescriptor String>, default: TextAttributesKey? = null) {
     // 特殊关键词
-    KEYWORD(OptionsBundle.messagePointer("options.language.defaults.keyword"), Default.KEYWORD),
+    KEYWORD(YggdrasilBundle.messagePointer("color.defaults.keyword"), Default.KEYWORD),
     MODIFIER(YggdrasilBundle.messagePointer("valkyrie.highlight.modifier"), Default.KEYWORD),
 
     // 字面量
@@ -27,7 +26,7 @@ enum class HighlightColor(humanName: Supplier<@AttributeDescriptor String>, defa
     STRING_BAD(YggdrasilBundle.messagePointer("color.token.text"), Default.INVALID_STRING_ESCAPE),
 
     // 标识符
-    IDENTIFIER(OptionsBundle.messagePointer("options.language.defaults.identifier"), Default.IDENTIFIER),
+    IDENTIFIER(YggdrasilBundle.messagePointer("color.defaults.identifier"), Default.IDENTIFIER),
     SYM_TYPE(YggdrasilBundle.messagePointer("color.token.symbol.trait"), Default.CLASS_REFERENCE),
     RULE_CLASS(YggdrasilBundle.messagePointer("color.token.symbol.class"), Default.CLASS_NAME),
     RULE_UNION(YggdrasilBundle.messagePointer("color.token.symbol.variant"), Default.INTERFACE_NAME),
@@ -47,11 +46,11 @@ enum class HighlightColor(humanName: Supplier<@AttributeDescriptor String>, defa
 
     // 标点符号
     ASSIGN(YggdrasilBundle.messagePointer("color.token.set"), Default.OPERATION_SIGN),
-    OPERATION(OptionsBundle.messagePointer("options.language.defaults.operation"), Default.OPERATION_SIGN),
+    OPERATION(YggdrasilBundle.messagePointer("color.defaults.operation"), Default.OPERATION_SIGN),
     OP_NUMBER(YggdrasilBundle.messagePointer("color.token.number.suffix"), Default.METADATA),
     OP_STRING(YggdrasilBundle.messagePointer("color.token.string.prefix"), Default.KEYWORD),
-    COMMENT_LINE(OptionsBundle.messagePointer("options.language.defaults.line.comment"), Default.LINE_COMMENT),
-    COMMENT_BLOCK(OptionsBundle.messagePointer("options.language.defaults.block.comment"), Default.BLOCK_COMMENT),
+    COMMENT_LINE(YggdrasilBundle.messagePointer("color.defaults.line.comment"), Default.LINE_COMMENT),
+    COMMENT_BLOCK(YggdrasilBundle.messagePointer("color.defaults.block.comment"), Default.BLOCK_COMMENT),
     ;
 
     val textAttributesKey: TextAttributesKey = TextAttributesKey.createTextAttributesKey("voml.lang.$name", default)

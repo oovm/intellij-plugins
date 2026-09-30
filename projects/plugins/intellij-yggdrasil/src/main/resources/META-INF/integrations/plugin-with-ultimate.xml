@@ -1,5 +1,0 @@
-<idea-plugin>
-	<extensions defaultExtensionNs="com.intellij">
-		<platform.lsp.serverSupportProvider implementation="yggdrasil.integration.lsp.YggdrasilLanguageProtocol"/>
-	</extensions>
-</idea-plugin>

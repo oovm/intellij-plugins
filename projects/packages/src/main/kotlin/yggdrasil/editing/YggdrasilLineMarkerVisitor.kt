@@ -30,7 +30,7 @@ class YggdrasilLineMarkerVisitor : YggdrasilVisitor {
 
     private fun mark(element: PsiElement?, icon: Icon) {
         if (element != null) {
-            marks.add(YggdrasilLineMarkerInfo(element, icon))
+            marks.add(yggdrasilLineMarker(element, icon))
         }
     }
 }

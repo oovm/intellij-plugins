@@ -7,10 +7,14 @@ import com.intellij.psi.PsiDirectory
 import jss.surface.file.MessageBundle
 import jss.surface.file.JssIcons
 
-class CreateFile : CreateFileFromTemplateAction(name, description, JssIcons.FILE) {
+class CreateFile :
+    CreateFileFromTemplateAction(
+        { MessageBundle.message("action.create_file") },
+        { MessageBundle.message("action.create_file.description") },
+        JssIcons.FILE,
+    ) {
     companion object {
-        private val name = MessageBundle.message("action.create_file")
-        private val description = MessageBundle.message("action.create_file.description")
+        private val name get() = MessageBundle.message("action.create_file")
     }
 
 

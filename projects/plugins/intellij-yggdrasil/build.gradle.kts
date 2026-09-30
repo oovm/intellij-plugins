@@ -36,6 +36,11 @@ dependencies {
                 it.split(',').map(String::trim).filter(String::isNotEmpty)
             },
         )
+        bundledModules(
+            providers.gradleProperty("platformBundledModules").map {
+                it.split(',').map(String::trim).filter(String::isNotEmpty)
+            },
+        )
         plugins(
             providers.gradleProperty("platformPlugins").map {
                 it.split(',').map(String::trim).filter(String::isNotEmpty)
@@ -115,8 +120,8 @@ tasks {
 
     register("ciVerify") {
         group = "verification"
-        description = "CI gate: compile, unit tests, and package the Yggdrasil plugin."
-        dependsOn("compileKotlin", "compileTestKotlin", "test", "buildPlugin")
+        description = "CI gate: compile, unit tests, plugin verifier, and package the Yggdrasil plugin."
+        dependsOn("compileKotlin", "compileTestKotlin", "test", "verifyPlugin", "buildPlugin")
     }
 }
 

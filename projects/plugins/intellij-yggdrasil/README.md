@@ -8,4 +8,4 @@ Language implementation lives in `:packages` under the `yggdrasil.*` package; th
 
 - Hand-written lexer and parser (no Grammar-Kit / ANTLR generation)
 - Syntax highlighting, structure view, formatting, and completion
-- Optional LSP integration when Ultimate is present
+- LSP integration via the platform LSP module (`yggdrasil-lsp` on PATH)

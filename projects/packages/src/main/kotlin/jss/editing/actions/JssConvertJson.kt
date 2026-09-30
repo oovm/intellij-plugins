@@ -10,13 +10,14 @@ import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.LangDataKeys
 import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiFileFactory
+import java.util.function.Supplier
 
-class JssConvertJson : CreateFileAction(name, description, JssIcons.FILE) {
-    companion object {
-        private val name = MessageBundle.message("action.convert_json")
-        private val description = MessageBundle.message("action.convert_json.description")
-
-    }
+class JssConvertJson :
+    CreateFileAction(
+        Supplier { MessageBundle.message("action.convert_json") },
+        Supplier { MessageBundle.message("action.convert_json.description") },
+        Supplier { JssIcons.FILE },
+    ) {
 
     private var sourceFile: PsiFile? = null;
 
