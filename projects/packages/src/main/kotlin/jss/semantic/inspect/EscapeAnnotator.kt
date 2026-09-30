@@ -8,11 +8,11 @@ import com.intellij.openapi.editor.DefaultLanguageHighlighterColors.INVALID_STRI
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors.VALID_STRING_ESCAPE
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
-import jss.surface.psi.VosUrlMaybeValidNode
+import jss.surface.psi.JssUrlMaybeValidNode
 
 class EscapeAnnotator : Annotator {
     @Suppress("UNUSED_PARAMETER")
-    private fun annotate(element: VosUrlMaybeValidNode, holder: AnnotationHolder) {
+    private fun annotate(element: JssUrlMaybeValidNode, holder: AnnotationHolder) {
     }
 
 

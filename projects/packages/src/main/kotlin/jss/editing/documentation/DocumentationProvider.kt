@@ -14,14 +14,14 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.SyntaxTraverser
 import jss.surface.file.JssFileNode
-import jss.surface.psi.VosClassStatementNode
+import jss.surface.psi.JssClassStatementNode
 import java.util.function.Consumer
 
 
 class DocumentationProvider : DocumentationProvider {
     override fun generateDoc(element: PsiElement?, originalElement: PsiElement?): String? {
         return when (element) {
-            is VosClassStatementNode -> {
+            is JssClassStatementNode -> {
                 "class ${element.name}"
             }
             else -> {

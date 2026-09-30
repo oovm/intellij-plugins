@@ -48,7 +48,7 @@ enum class JssColor(humanName: Supplier<@NlsContexts.AttributeDescriptor String>
     EXTENSION(MessageBundle.messagePointer("color.defaults.metadata"), Default.METADATA),
     ;
 
-    val textAttributesKey: TextAttributesKey = TextAttributesKey.createTextAttributesKey("voml.lang.$name", default)
+    val textAttributesKey: TextAttributesKey = TextAttributesKey.createTextAttributesKey("jss.lang.$name", default)
     val attributesDescriptor: AttributesDescriptor = AttributesDescriptor(humanName, textAttributesKey)
     val testSeverity: HighlightSeverity = HighlightSeverity(name, HighlightSeverity.INFORMATION.myVal)
 }

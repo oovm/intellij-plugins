@@ -13,7 +13,7 @@ object TestTimeout {
         val caller = Thread.currentThread()
         val timedOut = AtomicBoolean(false)
         val watchdog = Executors.newSingleThreadScheduledExecutor { runnable ->
-            Thread(runnable, "vos-test-timeout-watchdog").apply { isDaemon = true }
+            Thread(runnable, "jss-test-timeout-watchdog").apply { isDaemon = true }
         }
         val future = watchdog.schedule({
             timedOut.set(true)

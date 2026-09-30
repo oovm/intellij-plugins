@@ -9,50 +9,50 @@ import jss.surface.ast.DeclareNode
 import jss.surface.file.JssIcons
 import javax.swing.Icon
 
-class VosAnnotationNode(node: ASTNode) : VosNode(node)
-class VosAnnotationBlockNode(node: ASTNode) : VosNode(node)
-class VosAnnotationOneNode(node: ASTNode) : VosNode(node)
+class JssAnnotationNode(node: ASTNode) : JssNode(node)
+class JssAnnotationBlockNode(node: ASTNode) : JssNode(node)
+class JssAnnotationOneNode(node: ASTNode) : JssNode(node)
 
-class JssArrayNode(node: ASTNode) : VosNode(node) {
+class JssArrayNode(node: ASTNode) : JssNode(node) {
     override fun getIcon(flags: Int): Icon = JssIcons.ANNOTATION
 }
 
-class VosBooleanNode(node: ASTNode) : VosNode(node)
-class JssBraceBlockNode(node: ASTNode) : VosNode(node)
-class JssBracketBlockNode(node: ASTNode) : VosNode(node)
+class JssBooleanNode(node: ASTNode) : JssNode(node)
+class JssBraceBlockNode(node: ASTNode) : JssNode(node)
+class JssBracketBlockNode(node: ASTNode) : JssNode(node)
 
-class JssClassBlockNode(node: ASTNode) : VosNode(node) {
-    val classFieldList: List<VosClassFieldNode>
-        get() = PsiTreeUtil.getChildrenOfTypeAsList(this, VosClassFieldNode::class.java)
+class JssClassBlockNode(node: ASTNode) : JssNode(node) {
+    val classFieldList: List<JssClassFieldNode>
+        get() = PsiTreeUtil.getChildrenOfTypeAsList(this, JssClassFieldNode::class.java)
 }
 
-class VosClassBoundNode(node: ASTNode) : DeclareNode(node) {
-    override fun getOriginalElement(): VosClassBoundNode = this
+class JssClassBoundNode(node: ASTNode) : DeclareNode(node) {
+    override fun getOriginalElement(): JssClassBoundNode = this
     override fun getIcon(flags: Int) = JssIcons.BOUND
-    override fun getNameIdentifier(): VosIdentifierNode = identifier
+    override fun getNameIdentifier(): JssIdentifierNode = identifier
     override fun setName(name: String): PsiElement = TODO("Not yet implemented")
 
-    val identifier: VosIdentifierNode
+    val identifier: JssIdentifierNode
         get() = childRequired()
 }
 
-class VosClassFieldNode(node: ASTNode) : DeclareNode(node) {
-    override fun getOriginalElement(): VosClassFieldNode = this
+class JssClassFieldNode(node: ASTNode) : DeclareNode(node) {
+    override fun getOriginalElement(): JssClassFieldNode = this
     override fun getIcon(flags: Int) = JssIcons.FIELD
-    override fun getNameIdentifier(): VosIdentifierNode = identifier
+    override fun getNameIdentifier(): JssIdentifierNode = identifier
     override fun setName(name: String): PsiElement = TODO("Not yet implemented")
 
-    val identifier: VosIdentifierNode
+    val identifier: JssIdentifierNode
         get() = childRequired()
 }
 
-class VosClassStatementNode(node: ASTNode) : DeclareNode(node) {
-    override fun getOriginalElement(): VosClassStatementNode = this
+class JssClassStatementNode(node: ASTNode) : DeclareNode(node) {
+    override fun getOriginalElement(): JssClassStatementNode = this
     override fun getIcon(flags: Int) = JssIcons.CLASS
-    override fun getNameIdentifier(): VosIdentifierNode = identifier
+    override fun getNameIdentifier(): JssIdentifierNode = identifier
     override fun setName(name: String): PsiElement = TODO("Not yet implemented")
 
-    val identifier: VosIdentifierNode
+    val identifier: JssIdentifierNode
         get() = childRequired()
     val classBlock: JssClassBlockNode?
         get() = child()
@@ -60,22 +60,22 @@ class VosClassStatementNode(node: ASTNode) : DeclareNode(node) {
     override fun getChildrenView(): Array<ViewElement> {
         val block = classBlock ?: return emptyArray()
         val out = mutableListOf<ViewElement>()
-        for (it in block.searchChildrenOfType(VosClassBoundNode::class.java)) {
+        for (it in block.searchChildrenOfType(JssClassBoundNode::class.java)) {
             out.add(ViewElement(it))
         }
-        for (it in block.searchChildrenOfType(VosClassFieldNode::class.java)) {
+        for (it in block.searchChildrenOfType(JssClassFieldNode::class.java)) {
             out.add(ViewElement(it))
         }
         return out.toTypedArray()
     }
 }
 
-class VosCompareNode(node: ASTNode) : VosNode(node)
-class VosIdentifierNode(node: ASTNode) : VosNode(node)
-class VosIntegerSignedNode(node: ASTNode) : VosNode(node)
+class JssCompareNode(node: ASTNode) : JssNode(node)
+class JssIdentifierNode(node: ASTNode) : JssNode(node)
+class JssIntegerSignedNode(node: ASTNode) : JssNode(node)
 
-class VosKeyNode(node: ASTNode) : VosNode(node) {
-    override fun getOriginalElement(): VosKeyNode = this
+class JssKeyNode(node: ASTNode) : JssNode(node) {
+    override fun getOriginalElement(): JssKeyNode = this
     override fun getIcon(flags: Int): Icon = JssIcons.ANNOTATION
     override fun getName(): String = when (firstChild?.elementType) {
         JssTypes.STRING -> text.substring(1, text.length - 1)
@@ -83,27 +83,27 @@ class VosKeyNode(node: ASTNode) : VosNode(node) {
     }
 }
 
-class JssKvPairNode(node: ASTNode) : VosNode(node)
+class JssKvPairNode(node: ASTNode) : JssNode(node)
 
-class VosLetStatementNode(node: ASTNode) : DeclareNode(node) {
-    override fun getOriginalElement(): VosLetStatementNode = this
+class JssLetStatementNode(node: ASTNode) : DeclareNode(node) {
+    override fun getOriginalElement(): JssLetStatementNode = this
     override fun getIcon(flags: Int) = when (firstChild?.text) {
         "let", "val", "const" -> JssIcons.CONSTANT
         else -> JssIcons.MUTABLE
     }
-    override fun getNameIdentifier(): VosIdentifierNode = identifier
+    override fun getNameIdentifier(): JssIdentifierNode = identifier
     override fun setName(name: String): PsiElement = TODO("Not yet implemented")
 
-    val identifier: VosIdentifierNode
+    val identifier: JssIdentifierNode
         get() = childRequired()
 }
 
-class VosModifiersNode(node: ASTNode) : VosNode(node)
-class VosNamespaceNode(node: ASTNode) : VosNode(node)
-class VosNamespaceStatementNode(node: ASTNode) : VosNode(node)
-class VosNullNode(node: ASTNode) : VosNode(node)
-class JssObjectNode(node: ASTNode) : VosNode(node)
-class VosSchemaNode(node: ASTNode) : VosNode(node)
+class JssModifiersNode(node: ASTNode) : JssNode(node)
+class JssNamespaceNode(node: ASTNode) : JssNode(node)
+class JssNamespaceStatementNode(node: ASTNode) : JssNode(node)
+class JssNullNode(node: ASTNode) : JssNode(node)
+class JssObjectNode(node: ASTNode) : JssNode(node)
+class JssSchemaNode(node: ASTNode) : JssNode(node)
 
 class JssSchemaStatementNode(node: ASTNode) : DeclareNode(node) {
     override fun getOriginalElement(): JssSchemaStatementNode = this
@@ -112,58 +112,58 @@ class JssSchemaStatementNode(node: ASTNode) : DeclareNode(node) {
     override fun getIcon(flags: Int): Icon = JssIcons.CLASS
 }
 
-class VosSetNode(node: ASTNode) : VosNode(node)
-class VosStringLiteralNode(node: ASTNode) : VosNode(node)
-class JssTypeExpressionNode(node: ASTNode) : VosNode(node)
-class VosTypeGenericNode(node: ASTNode) : VosNode(node)
-class VosTypeGenericBoundNode(node: ASTNode) : VosNode(node)
-class VosTypeGenericCompareNode(node: ASTNode) : VosNode(node)
-class VosTypeGenericRangeNode(node: ASTNode) : VosNode(node)
-class VosTypeNumberNode(node: ASTNode) : VosNode(node)
-class JssTypeSymbolNode(node: ASTNode) : VosNode(node)
+class JssSetNode(node: ASTNode) : JssNode(node)
+class JssStringLiteralNode(node: ASTNode) : JssNode(node)
+class JssTypeExpressionNode(node: ASTNode) : JssNode(node)
+class JssTypeGenericNode(node: ASTNode) : JssNode(node)
+class JssTypeGenericBoundNode(node: ASTNode) : JssNode(node)
+class JssTypeGenericCompareNode(node: ASTNode) : JssNode(node)
+class JssTypeGenericRangeNode(node: ASTNode) : JssNode(node)
+class JssTypeNumberNode(node: ASTNode) : JssNode(node)
+class JssTypeSymbolNode(node: ASTNode) : JssNode(node)
 
-class JssUnionBlockNode(node: ASTNode) : VosNode(node) {
-    val unionInnerList: List<VosUnionInnerNode>
-        get() = PsiTreeUtil.getChildrenOfTypeAsList(this, VosUnionInnerNode::class.java)
+class JssUnionBlockNode(node: ASTNode) : JssNode(node) {
+    val unionInnerList: List<JssUnionInnerNode>
+        get() = PsiTreeUtil.getChildrenOfTypeAsList(this, JssUnionInnerNode::class.java)
 }
 
-class VosUnionFieldNode(node: ASTNode) : DeclareNode(node) {
-    override fun getOriginalElement(): VosUnionFieldNode = this
+class JssUnionFieldNode(node: ASTNode) : DeclareNode(node) {
+    override fun getOriginalElement(): JssUnionFieldNode = this
     override fun getIcon(flags: Int) = JssIcons.FIELD
-    override fun getNameIdentifier(): VosIdentifierNode = identifier
+    override fun getNameIdentifier(): JssIdentifierNode = identifier
     override fun setName(name: String): PsiElement = TODO("Not yet implemented")
 
-    val identifier: VosIdentifierNode
+    val identifier: JssIdentifierNode
         get() = childRequired()
 }
 
-class VosUnionInnerNode(node: ASTNode) : VosNode(node) {
-    val unionField: VosUnionFieldNode?
-        get() = PsiTreeUtil.getChildOfType(this, VosUnionFieldNode::class.java)
+class JssUnionInnerNode(node: ASTNode) : JssNode(node) {
+    val unionField: JssUnionFieldNode?
+        get() = PsiTreeUtil.getChildOfType(this, JssUnionFieldNode::class.java)
 }
 
-class VosUnionStatementNode(node: ASTNode) : DeclareNode(node) {
-    override fun getOriginalElement(): VosUnionStatementNode = this
+class JssUnionStatementNode(node: ASTNode) : DeclareNode(node) {
+    override fun getOriginalElement(): JssUnionStatementNode = this
     override fun getIcon(flags: Int): Icon = JssIcons.UNION
-    override fun getNameIdentifier(): VosIdentifierNode = identifier
+    override fun getNameIdentifier(): JssIdentifierNode = identifier
     override fun setName(name: String): PsiElement = TODO("Not yet implemented")
 
-    val identifier: VosIdentifierNode
+    val identifier: JssIdentifierNode
         get() = childRequired()
 }
 
-class VosUrlMaybeValidNode(node: ASTNode) : VosNode(node)
+class JssUrlMaybeValidNode(node: ASTNode) : JssNode(node)
 
-class VosValueNode(node: ASTNode) : VosNode(node) {
-    override fun getOriginalElement(): VosValueNode = this
+class JssValueNode(node: ASTNode) : JssNode(node) {
+    override fun getOriginalElement(): JssValueNode = this
     override fun getIcon(flags: Int): Icon = JssIcons.ANNOTATION
 }
 
-private inline fun <reified T : VosNode> VosNode.child(): T? =
+private inline fun <reified T : JssNode> JssNode.child(): T? =
     PsiTreeUtil.getChildOfType(this, T::class.java)
 
-private inline fun <reified T : VosNode> DeclareNode.child(): T? =
+private inline fun <reified T : JssNode> DeclareNode.child(): T? =
     PsiTreeUtil.getChildOfType(this, T::class.java)
 
-private inline fun <reified T : VosNode> DeclareNode.childRequired(): T =
+private inline fun <reified T : JssNode> DeclareNode.childRequired(): T =
     child() ?: error("Missing ${T::class.java.simpleName} in $this")

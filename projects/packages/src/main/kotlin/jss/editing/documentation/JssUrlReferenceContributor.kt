@@ -10,13 +10,13 @@ import com.intellij.patterns.PlatformPatterns
 import com.intellij.patterns.PsiElementPattern
 import com.intellij.psi.PsiReferenceContributor
 import com.intellij.psi.PsiReferenceRegistrar
-import jss.surface.psi.VosUrlMaybeValidNode
+import jss.surface.psi.JssUrlMaybeValidNode
 
 
 class JssUrlReferenceContributor : PsiReferenceContributor() {
     override fun registerReferenceProviders(registrar: PsiReferenceRegistrar) {
-        val psiLiteralExpressionCapture: PsiElementPattern.Capture<VosUrlMaybeValidNode> = PlatformPatterns.psiElement(
-            VosUrlMaybeValidNode::class.java,
+        val psiLiteralExpressionCapture: PsiElementPattern.Capture<JssUrlMaybeValidNode> = PlatformPatterns.psiElement(
+            JssUrlMaybeValidNode::class.java,
         )
         registrar.registerReferenceProvider(psiLiteralExpressionCapture, JssUrlReferenceProvider())
     }

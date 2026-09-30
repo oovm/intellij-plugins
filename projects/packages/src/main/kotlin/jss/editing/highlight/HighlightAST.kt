@@ -9,17 +9,17 @@ import com.intellij.psi.PsiFile
 import com.intellij.psi.util.elementType
 import com.intellij.psi.util.nextLeaf
 import jss.surface.file.JssFileNode
-import jss.surface.psi.VosAnnotationNode
-import jss.surface.psi.VosClassFieldNode
-import jss.surface.psi.VosClassStatementNode
+import jss.surface.psi.JssAnnotationNode
+import jss.surface.psi.JssClassFieldNode
+import jss.surface.psi.JssClassStatementNode
 import jss.surface.psi.JssKvPairNode
-import jss.surface.psi.VosModifiersNode
+import jss.surface.psi.JssModifiersNode
 import jss.surface.psi.JssSchemaStatementNode
 import jss.surface.psi.JssTypeSymbolNode
 import jss.surface.psi.JssTypes
-import jss.surface.psi.VosUnionFieldNode
-import jss.surface.psi.VosUnionStatementNode
-import jss.surface.psi.VosValueNode
+import jss.surface.psi.JssUnionFieldNode
+import jss.surface.psi.JssUnionStatementNode
+import jss.surface.psi.JssValueNode
 
 class HighlightAST : HighlightVisitor {
     private var infoHolder: HighlightInfoHolder? = null
@@ -44,8 +44,8 @@ class HighlightAST : HighlightVisitor {
                     highlight(element, JssColor.SYM_CLASS)
                 }
             }
-            is VosAnnotationNode -> highlight(element, JssColor.SYM_ANNO)
-            is VosClassStatementNode -> {
+            is JssAnnotationNode -> highlight(element, JssColor.SYM_ANNO)
+            is JssClassStatementNode -> {
                 val id = element.identifier
                 val head = id.text.firstOrNull()
                 if (head != null && head.isLowerCase()) {
@@ -54,20 +54,20 @@ class HighlightAST : HighlightVisitor {
                     highlight(id, JssColor.SYM_CLASS)
                 }
             }
-            is VosClassFieldNode -> highlight(element.identifier, JssColor.SYM_FIELD)
-            is VosUnionStatementNode -> highlight(element.identifier, JssColor.SYM_CLASS)
-            is VosUnionFieldNode -> highlight(element.identifier, JssColor.SYM_FIELD)
+            is JssClassFieldNode -> highlight(element.identifier, JssColor.SYM_FIELD)
+            is JssUnionStatementNode -> highlight(element.identifier, JssColor.SYM_CLASS)
+            is JssUnionFieldNode -> highlight(element.identifier, JssColor.SYM_FIELD)
             is JssKvPairNode -> {
                 val head = element.firstChild
                 if (head != null) highlight(head, JssColor.SYM_FIELD)
             }
-            is VosValueNode -> {
+            is JssValueNode -> {
                 when (element.firstChild?.elementType) {
                     JssTypes.NULL -> highlight(element.firstChild!!, JssColor.NULL)
                     JssTypes.BOOLEAN -> highlight(element.firstChild!!, JssColor.BOOLEAN)
                 }
             }
-            is VosModifiersNode -> {
+            is JssModifiersNode -> {
                 for (child in element.children) {
                     highlight(child, JssColor.MODIFIER)
                 }
